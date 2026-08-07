@@ -1,21 +1,65 @@
 # Autonomous Agent Workflows
 
-> Architecture & patterns for **production-grade, self-improving AI agents that run unattended on a schedule.**
+> How I run **scheduled, fully unattended LLM-agent tasks** that do real work every morning — and get better at it over time.
 
-This repo documents a pattern I use in production to run LLM-powered agents as **scheduled, fully autonomous tasks** — no human in the loop. Two real agents built on this pattern have run **daily for 60+ consecutive days**, exporting call logs and file-transfer logs to monthly Excel workbooks on a NAS, learning from their own mistakes along the way.
-
-It is not a framework or a library. It is a **repeatable file-and-prompt architecture** that works with any agent runtime that can read files and run shell commands (Claude Code / ZCode, etc.).
+Two agents built on this pattern run **daily in production** (weekdays 9 AM and 10 AM), exporting call logs and file-transfer logs to monthly Excel workbooks on a NAS. They've completed 60+ runs each.
 
 ---
 
-## Why this matters
+## What it actually does (concrete example)
 
-Most "AI automation" is a person pasting prompts into a chatbot. That doesn't run at 9 AM on its own, and it doesn't get better over time. This pattern does both:
+```
+Every weekday at 10 AM ──▶ agent wakes up (no human)
+        │
+        │  1. reads SMDR call-record CSVs produced overnight by a Dockerized PBX receiver
+        │  2. rebuilds a monthly Excel workbook from scratch (xlsxwriter)
+        │  3. uploads it to a NAS share via SMB
+        │  4. re-downloads it to validate (sheet names + row counts match)
+        │  5. deletes the now-processed source CSVs
+        │  6. writes a structured run report
+        │
+        ▼
+   monthly call-log workbook on the NAS, one worksheet per day
+```
 
-- **Unattended** — triggered by a scheduler. A skill file is the entry point. No user is present.
-- **Safe by design** — hard rules prevent destructive actions (overwrite, delete, expose credentials).
-- **Self-improving** — every run logs errors and insights to an append-only archive; future runs consult it via targeted search before repeating a mistake.
-- **Self-maintaining** — a month-end consolidation pass merges duplicates, prunes stale entries, and promotes durable lessons into the operational rulebook.
+**Input** (a daily CSV from the PBX receiver — see [`sample-data/`](sample-data/smdr-receiver/output/smdr_2026-08-04.csv)):
+
+```
+Call Start,Connected Time,Ring Time,Caller,Direction,Called Number,...
+2026-08-04 09:03:11,42,3,0298765432,Incoming,9333,...
+2026-08-04 10:05:54,204,5,0400123456,Outgoing,,0400123456,...
+```
+
+**Output** (a monthly Excel workbook — one worksheet per day, rebuilt every run):
+
+| Worksheet | Rows |
+|-----------|-----:|
+| `2026-08-04` | 13 |
+| `2026-08-05` | 11 |
+| … | … |
+
+You can run this rebuild step yourself right now — no NAS, no credentials needed:
+
+```bash
+cd sample-data
+pip install xlsxwriter openpyxl
+python3 rebuild_workbook_demo.py
+# → writes AUG_2026_demo.xlsx, validates it (13 rows, 32 cols)
+```
+
+The second agent (9 AM) does the same loop but for Synology NAS **file-transfer logs** — it authenticates via REST API, fetches `cifs` event records, and produces a monthly access-log workbook. See [`sample-data/nas-syslog/`](sample-data/nas-syslog/nas_access_records_2026-08-04.json) for the input format.
+
+---
+
+## Why this isn't just a cron job
+
+A plain script does steps 1–6 and stops. These agents **also learn from their own mistakes**:
+
+- Every run appends errors and insights to an append-only archive (`.learnings/`)
+- On the next run, when something goes wrong, the agent **greps the archive** and applies the prior fix instead of repeating the failure
+- Once a month, the agent **consolidates its own knowledge** — merges duplicates, prunes stale entries, promotes durable rules into the operational procedure
+
+So a failure that cost an hour to diagnose the first time costs seconds every time after.
 
 ---
 
@@ -48,69 +92,40 @@ Most "AI automation" is a person pasting prompts into a chatbot. That doesn't ru
 | **Truth** | `WORKINSTRUCTION.md` | Every run (in full) | When an operational rule changes |
 | **Archive** | `.learnings/*.md` | **Only via `grep`** on error/uncertainty | After every run (append-only) |
 
-The key insight: **the archive is for audit, the work-instruction is for operations.** New knowledge gets written to *both* — the archive entry is the history, the work-instruction edit is the living rule. Future runs read the work-instruction wholesale but only *search* the archive, so the archive can grow without bloating the context window.
+The key insight: **the archive is for audit, the work-instruction is for operations.** New knowledge gets written to both — the archive entry is the history, the work-instruction edit is the living rule.
 
-📖 Deep dive: [`docs/architecture.md`](docs/architecture.md)
-
----
-
-## The self-improvement loop
-
-```
-  run starts ──▶ works from WORKINSTRUCTION.md
-       │
-       │ hits error / novel situation
-       ▼
-  grep .learnings/ ──▶ found prior lesson? ──yes──▶ apply it, continue
-       │ no
-       ▼
-  solve it this run
-       │
-       ▼
-  post-run: append TERSE entry to .learnings/ERRORS.md or LEARNINGS.md
-       │
-       ▼ (if it changes how the task should run)
-  also edit WORKINSTRUCTION.md — promote the lesson to an operational rule
-```
-
-### Month-end consolidation
-
-On the **last working day** of each month (Mon–Fri, excluding public holidays — computed deterministically with the `holidays` package), the agent runs an extra pass on its own knowledge base:
-
-1. Merge duplicate entries across `LEARNINGS.md` / `ERRORS.md` / `FEATURE_REQUESTS.md`
-2. Prune entries superseded by a newer lesson
-3. Promote any newly-durable operational rule into `WORKINSTRUCTION.md`
-4. Rotate old entries (90+ days) into `.learnings/archive/`
-5. Emit its own `learnings_consolidation_report_YYYY-MM-DD.md`
-
-A consolidation failure is isolated — it never affects the already-completed daily export. A missed trigger day carries forward with an **idempotent-per-month catch-up**, so a missed day never skips a whole month.
-
-📖 Deep dive: [`docs/self-improvement-loop.md`](docs/self-improvement-loop.md)
+📖 Deep dives: [`docs/architecture.md`](docs/architecture.md) · [`docs/self-improvement-loop.md`](docs/self-improvement-loop.md)
 
 ---
 
-## Reference implementations
+## Repository contents
 
-Two sanitized, production-derived examples are included. All IPs, hostnames, share paths, and credentials have been redacted.
+```
+sample-data/                 ← realistic dummy inputs + a runnable demo
+  smdr-receiver/output/      ← daily SMDR CSV (what the PBX receiver writes)
+  nas-syslog/                ← NAS file-transfer log records (JSON)
+  rebuild_workbook_demo.py   ← run this to see the rebuild step work, offline
 
-| Agent | Schedule | Job | Example |
-|-------|----------|-----|---------|
-| **avaya-call-log** | Weekdays 10 AM | Read SMDR CSVs from a Dockerized PBX receiver, rebuild a monthly Excel workbook with `xlsxwriter`, upload via SMB, validate, clean up | [`examples/avaya-call-log/`](examples/avaya-call-log/) |
-| **nas-access-log** | Weekdays 9 AM | Fetch file-transfer logs from a Synology NAS via REST API, rebuild a monthly Excel workbook, upload via SMB, validate | [`examples/nas-access-log/`](examples/nas-access-log/) |
+examples/                    ← sanitized reference implementations
+  avaya-call-log/            ← SKILL.md + WORKINSTRUCTION.md + sample-report.md
+  nas-access-log/            ← SKILL.md + WORKINSTRUCTION.md + sample-report.md
 
-Each example contains a sanitized `SKILL.md` (the entry point), a trimmed `WORKINSTRUCTION.md` (the procedure), and a `sample-report.md` showing the structured output every run produces.
+docs/                        ← the architecture & patterns explained
+  architecture.md
+  self-improvement-loop.md
+```
+
+Each example uses **realistic dummy values** for everything (IPs `192.168.1.100`, account `svc_calllog`, share `shared`). Every example doc has a **"What to change for your setup"** table showing exactly what to swap to run it against your own environment.
 
 ---
 
 ## Safety invariants baked into every run
 
-These are non-negotiable rules written into every `WORKINSTRUCTION.md` Section 0:
-
-- **Never expose credentials** — passwords/tokens go in a vault, never in a report or `.md`
-- **Never overwrite** existing data without explicit approval — only *create new* entries
+- **Never expose credentials** — passwords/tokens live in a vault, never in a report or `.md`
+- **Never overwrite** existing data without explicit approval — only create new entries
 - **Export only up to yesterday** (Melbourne/AEST) — today's data may be incomplete
 - **Never delete** a processed input until its output is confirmed in the uploaded file
-- **Validate twice** — rebuild locally *and* re-download from the NAS after upload
+- **Validate twice** — rebuild locally AND re-download from the NAS after upload
 - **Stop and report** on any ambiguity that would need human approval — don't guess
 
 ---
@@ -118,10 +133,10 @@ These are non-negotiable rules written into every `WORKINSTRUCTION.md` Section 0
 ## Results in production
 
 - ✅ 60+ unattended daily runs per agent, across two agents
-- ✅ Self-healing dependencies (the runtime VM's filesystem resets between runs; each run re-installs its own `pysmb` / `holidays`)
-- ✅ Detects and tracks recurring anomalies (e.g. corrupted CSVs from an external port scanner) without crashing — flagged as stale items across 41 consecutive runs
+- ✅ Self-healing dependencies (the runtime VM's filesystem resets between runs; each run re-installs its own packages)
+- ✅ Detects and tracks recurring anomalies (corrupted CSVs from an external port scanner) across 41 consecutive runs without crashing
 - ✅ Month-end consolidation runs on schedule with cross-month catch-up
-- ✅ Every run emits a structured markdown report (run summary, export table, skipped items, open questions)
+- ✅ Every run emits a structured markdown report
 
 ---
 

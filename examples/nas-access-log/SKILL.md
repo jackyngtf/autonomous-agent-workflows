@@ -5,7 +5,7 @@ description: Synology NAS Access Log Export — fetch file-transfer logs via Sys
 
 # Synology NAS Access Log Automation
 
-> 🔒 **Sanitized reference excerpt.** All IPs, hostnames, share paths, and credentials have been redacted. This mirrors the structure of a production agent.
+> 🔒 **Sanitized reference excerpt.** Mirrors the structure of a production agent. Realistic dummy values used — see [`WORKINSTRUCTION.md`](WORKINSTRUCTION.md) "What to change for your setup" to adapt.
 
 You are running a scheduled task. No user is present. Follow all steps precisely.
 
@@ -13,7 +13,7 @@ You are running a scheduled task. No user is present. Follow all steps precisely
 
 Before doing anything else, read and follow the complete work instruction:
 
-`<working-directory>/nas-access-log/WORKINSTRUCTION.md`
+`<your-working-directory>/nas-access-log/WORKINSTRUCTION.md`
 
 That file is your **complete operational ruleset** — its Section 0 (Critical Rules) plus the step-by-step procedure contains ALL the details: NAS connection parameters, REST API endpoints, SMB share paths, code examples, troubleshooting, and safety constraints. Its **Step 0** runs BOTH the dependency check AND the archive size guard. Follow it exactly, starting at Step 0.
 
@@ -26,7 +26,7 @@ grep -rn "smb\|upload" .learnings/
 
 ## Working Directory
 
-All work happens in: `<working-directory>/nas-access-log/`
+All work happens in: `<your-working-directory>/nas-access-log/`
 
 Use Python for all operations — `requests` for Synology REST API calls (auth, File Station, SyslogClient), and `pysmb` for the workbook upload. No browser automation.
 
@@ -47,7 +47,7 @@ Use Python for all operations — `requests` for Synology REST API calls (auth, 
 ## Report
 
 Save the final run report as:
-`<working-directory>/nas-access-log/reports/nas_access_log_report_YYYY-MM-DD.md`
+`<your-working-directory>/nas-access-log/reports/nas_access_log_report_YYYY-MM-DD.md`
 
 The report must include:
 - **Run Summary** table (date/time, auth result, pre-flight result, latest covered date, missing dates, sheets added, upload + validation result)

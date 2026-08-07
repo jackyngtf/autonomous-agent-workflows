@@ -3,3 +3,4 @@ __pycache__/
 *.xlsx
 *.pkl
 .venv/
+*_demo.xlsx

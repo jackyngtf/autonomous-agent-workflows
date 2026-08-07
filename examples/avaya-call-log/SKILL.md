@@ -5,7 +5,7 @@ description: Avaya IP500 Call Log Export — read SMDR CSV files from a Dockeriz
 
 # Avaya IP500 Call Log Automation
 
-> 🔒 **Sanitized reference excerpt.** All IPs, hostnames, share paths, and credentials have been redacted. This mirrors the structure of a production agent.
+> 🔒 **Sanitized reference excerpt.** Mirrors the structure of a production agent. Realistic dummy values used — see [`WORKINSTRUCTION.md`](WORKINSTRUCTION.md) "What to change for your setup" to adapt.
 
 You are running a scheduled task. No user is present. Follow all steps precisely.
 
@@ -13,13 +13,13 @@ You are running a scheduled task. No user is present. Follow all steps precisely
 
 **Read `WORKINSTRUCTION.md` in full — it is your complete operational ruleset** (Section 0 critical rules, Step 0 pre-flight, the full procedure, reference implementation, and troubleshooting). Follow it exactly.
 
-Do **NOT** read the `.learnings/` files (`LEARNINGS.md`, `ERRORS.md`, `FEATURE_REQUESTS.md`) wholesale. They are append-only audit archives. Consult them via targeted `grep -rn "<keyword>" .learnings/` **only** when you hit an error, an unexpected result, or an uncertain decision.
+Do **NOT** read the `.learnings/` files (`LEARNINGS.md`, `ERRORS.md`, `FEATURE_REQUESTS.md`) wholesale. They are append-only audit archives. Consult them via targeted `grep -rn "<keyword>" .learnings/` **only** when you hit an error, an unexpected result, or an uncertain decision (e.g. SMB connect fails → `grep -rn "smb"`; a CSV won't parse → `grep -rn "nul\|encoding"`).
 
 Run **Step 0** of the work instruction first: it self-heals Python dependencies (`pysmb`) and runs the archive size guard that keeps `.learnings/` bounded.
 
 ## Working Directory
 
-All work happens in: `<working-directory>/avaya-call-log`
+All work happens in: `<your-working-directory>/avaya-call-log`
 
 Use Python for all file operations — SMB (`pysmb`) for NAS access, `csv` module for reading SMDR data.
 
@@ -37,7 +37,7 @@ Use Python for all file operations — SMB (`pysmb`) for NAS access, `csv` modul
 ## Report
 
 Save the final run report as:
-`<working-directory>/avaya-call-log/reports/avaya_call_log_report_YYYY-MM-DD.md`
+`<your-working-directory>/avaya-call-log/reports/avaya_call_log_report_YYYY-MM-DD.md`
 
 The report must include:
 - **Run Summary** table (date/time, SMB connection result, CSVs found, workbooks processed, sheets added, CSVs deleted)

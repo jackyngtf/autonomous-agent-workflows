@@ -1,0 +1,82 @@
+[
+  {
+    "UTC": "2026-08-03T23:05:12+00:00",
+    "Account": "jsmith",
+    "Event": "cifs:connect",
+    "Share": "shared",
+    "Path": "/shared/Projects/Q3-Report.pptx",
+    "File size": "2456320",
+    "Action": "write",
+    "From": "10.20.30.41 (WS-JSMITH)"
+  },
+  {
+    "UTC": "2026-08-03T23:18:44+00:00",
+    "Account": "anonymous",
+    "Event": "cifs:connect",
+    "Share": "shared",
+    "Path": "/shared/Public/Onboarding-Checklist.pdf",
+    "File size": "184320",
+    "Action": "read",
+    "From": "10.20.30.52 (WS-LEEL)"
+  },
+  {
+    "UTC": "2026-08-03T23:42:09+00:00",
+    "Account": "svc_backup",
+    "Event": "cifs:connect",
+    "Share": "backups",
+    "Path": "/backups/db/daily-snap-20260804.tar.gz",
+    "File size": "4294967296",
+    "Action": "write",
+    "From": "10.20.40.10 (SRV-BACKUP01)"
+  },
+  {
+    "UTC": "2026-08-04T00:15:33+00:00",
+    "Account": "mwong",
+    "Event": "cifs:connect",
+    "Share": "home",
+    "Path": "/home/mwong/Documents/Budget-2026.xlsx",
+    "File size": "98244",
+    "Action": "write",
+    "From": "10.20.30.65 (WS-MWONG)"
+  },
+  {
+    "UTC": "2026-08-04T00:51:07+00:00",
+    "Account": "anonymous",
+    "Event": "cifs:connect",
+    "Share": "shared",
+    "Path": "/shared/Marketing/Launch-Photos.zip",
+    "File size": "524288000",
+    "Action": "read",
+    "From": "10.20.30.71 (WS-CHANW)"
+  },
+  {
+    "UTC": "2026-08-04T01:30:22+00:00",
+    "Account": "rpatel",
+    "Event": "cifs:connect",
+    "Share": "shared",
+    "Path": "/shared/HR/Policies-2026.pdf",
+    "File size": "312440",
+    "Action": "read",
+    "From": "10.20.30.48 (WS-RPATEL)"
+  },
+  {
+    "UTC": "2026-08-04T02:12:55+00:00",
+    "Account": "svc_backup",
+    "Event": "cifs:connect",
+    "Share": "backups",
+    "Path": "/backups/vm/finance-vm-20260804.vhdx",
+    "File size": "34359738368",
+    "Action": "write",
+    "From": "10.20.40.10 (SRV-BACKUP01)"
+  },
+  {
+    "UTC": "2026-08-04T03:05:18+00:00",
+    "Account": "jsmith",
+    "Event": "cifs:connect",
+    "Share": "shared",
+    "Path": "/shared/Projects/Client-Brief.docx",
+    "File size": "64288",
+    "Action": "write",
+    "From": "10.20.30.41 (WS-JSMITH)"
+  }
+]

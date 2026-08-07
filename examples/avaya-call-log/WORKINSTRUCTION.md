@@ -1,6 +1,17 @@
-# Avaya IP500 Call Log Automation — Work Instruction (Sanitized Excerpt)
+# Avaya IP500 Call Log Automation — Work Instruction (Reference Excerpt)
 
-> 🔒 **Sanitized.** Structural reference only — all IPs, hostnames, share paths, and credentials redacted. Code snippets use `<redacted>` placeholders where production values live.
+> 🔒 **Sanitized reference.** Based on a production work-instruction. All IPs, hostnames, share paths, and credentials are **realistic dummy values** — swap them for your own environment using the config table below. See [`sample-report.md`](sample-report.md) for a real run's output.
+
+## What to change for your setup
+
+| Variable | Dummy value in this doc | What it is |
+|---|---|---|
+| `192.168.1.100` | NAS IP | Your Synology NAS IP |
+| `DEMO-NAS` | SMB server name | Your NAS hostname |
+| `shared` | SMB share name | The share where workbooks live |
+| `svc_calllog` | service account | A dedicated account with Read/Write on the share |
+| `/shared/reports/call-logs/...` | workbook path | Where monthly workbooks are stored |
+| `9000` | SMDR receiver port | The TCP port your `smdr-receiver` container listens on |
 
 ## 0. Critical Rules — Read First
 
@@ -25,30 +36,48 @@ Dockerized SMDR receiver ──▶ daily CSVs on NAS
             rebuild monthly XLSX ──▶ upload via SMB ──▶ validate ──▶ cleanup CSVs
 ```
 
+### Input format
+
+A daily SMDR CSV (`smdr_YYYY-MM-DD.csv`). First row is the Avaya IP Office SMDR header (29 columns):
+
+```
+Call Start,Connected Time,Ring Time,Caller,Direction,Called Number,Dialled Number,Account,Is Internal,Call ID,Continuation,Party1Device,Party1Name,Party2Device,Party2Name,Hold Time,Park Time,AuthValid,AuthCode,UserCharged,CallCharge,Currency,AmountAtLastUserChange,CallUnits,UnitsAtLastUserChange,CostPerUnit,MarkUp,ExternalTargetingCause,ExternalTargeterId,ExternalTargetedNumber
+2026-08-04 09:03:11,42,3,0298765432,Incoming,9333,,1001,N,18455,0,"Ext 333","Reception","9333","Main Line",0,0,0,,,,0.00,AUD,...
+```
+
+See [`sample-data/smdr-receiver/output/smdr_2026-08-04.csv`](../../sample-data/smdr-receiver/output/smdr_2026-08-04.csv) for a full example.
+
 ## 2. NAS Connection & File Paths
 
 ### Connection Parameters
 
 | Parameter | Value |
 |---|---|
-| SMB Server | `<redacted — see vault>` |
-| SMB Port | `<redacted>` |
-| Share | `<redacted>` |
-| Username | `<redacted — see vault>` |
-| Password | `<redacted — see vault>` |
+| SMB Server | `192.168.1.100` |
+| SMB Port | `445` |
+| Share | `shared` |
+| Username | `svc_calllog` |
+| Password | *(from vault — never written here)* |
 
 ```python
-# Always use keyword arguments (a hard-won lesson: positional args silently mismatch)
+# Always use keyword arguments (a hard-won lesson: positional args silently mismatch
+# because the pysmb SMBConnection parameter order changed in 1.2.14)
 from smb.SMBConnection import SMBConnection
 conn = SMBConnection(
-    username=<redacted>,
-    password=<redacted>,
+    username="svc_calllog",
+    password=<password from vault>,
     my_name="agent",
-    remote_name=<redacted>,
+    remote_name="DEMO-NAS",
     use_ntlm_v2=True,
 )
-conn.connect(<redacted>, <redacted>)
+conn.connect("192.168.1.100", 445)
 ```
+
+**Workbook path on NAS:**
+```
+/shared/reports/call-logs/{Year}/{MON}.xlsx
+```
+where `{Year}` is four-digit year and `{MON}` is the three-letter uppercase month (JAN, FEB, …).
 
 ## 3. Procedure
 
@@ -77,21 +106,22 @@ Parse each CSV. Skip CSVs with NUL bytes / no valid SMDR rows — record them as
 
 ### Step 4 — Rebuild workbook
 
+The core step. **Always rebuild from scratch with `xlsxwriter`** — never ZIP-merge or openpyxl-write. A minimal version of this rebuild logic is in [`sample-data/rebuild_workbook_demo.py`](../../sample-data/rebuild_workbook_demo.py) (runnable offline).
+
 ```python
 import xlsxwriter
 workbook = xlsxwriter.Workbook(tmp_path)
 # Re-write ALL existing sheets exactly (preserved), then add new sheets from validated CSVs
-# ... per-sheet formatting ...
 workbook.close()
 ```
 
 ### Step 5 — Upload workbook via SMB
 
 ```python
-conn.storeFile(<redacted share>, remote_path, open(tmp_path, "rb"))
+conn.storeFile("shared", "reports/call-logs/2026/AUG.xlsx", open(tmp_path, "rb"))
 ```
 
-> **Hard-won lesson (LRN):** This NAS returns `STATUS_INVALID_PARAMETER` for `createDirectory` on an already-existing folder. Treat that failure as non-fatal — re-list and proceed; `storeFile` fails loudly if the folder is genuinely missing.
+> **Hard-won lesson:** This NAS returns `STATUS_INVALID_PARAMETER` for `createDirectory` on an already-existing folder. Treat that failure as non-fatal — re-listPath and proceed; `storeFile` fails loudly if the folder is genuinely missing.
 
 ### Step 6 — Validate upload
 
@@ -103,7 +133,7 @@ Only after Step 6 confirms the sheet exists in the uploaded workbook. Corrupted 
 
 ### Step 8 — Generate report
 
-Write `reports/avaya_call_log_report_YYYY-MM-DD.md` (see `sample-report.md` for format).
+Write `reports/avaya_call_log_report_YYYY-MM-DD.md` (see [`sample-report.md`](sample-report.md) for format).
 
 ### Step 9 — Month-end consolidation (conditional)
 
