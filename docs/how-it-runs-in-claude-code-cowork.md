@@ -19,7 +19,13 @@ Each took a chunk of focused time every single day, on every weekday, forever �
 
 ## The scheduling layer: Claude Code Cowork
 
-A Scheduled Task in Cowork is a recurring, unattended agent run. You configure five things:
+A Scheduled Task in Cowork is a recurring, unattended agent run. Here are the two production tasks — both show green (success) runs day after day:
+
+![Claude Code Cowork scheduled tasks — two daily agents](../images/cowork-task-list.png)
+
+*(Account name in the sidebar pixelated for privacy.)*
+
+You configure five things:
 
 | Field | What it does | Avaya example | NAS example |
 |-------|-------------|---------------|-------------|
@@ -53,6 +59,18 @@ A Scheduled Task in Cowork is a recurring, unattended agent run. You configure f
 ```
 
 **The key decision:** the *Instructions box* in Cowork holds the **SKILL.md** content — the thin entry-point contract. It is *not* the full procedure. The SKILL.md's first instruction is "read `WORKINSTRUCTION.md` in full", so the agent loads the detailed procedure itself at run time. This keeps the scheduled-task config small and stable, while the heavy procedure lives in a file the agent can read and the human can edit.
+
+Here's what one of these tasks looks like configured — the `avaya-call-log` task showing its Instructions (the SKILL.md content), the Folders it can see, the weekday 10:00 schedule, and the run history:
+
+![Claude Code Cowork task detail — avaya-call-log](../images/cowork-avaya-task-detail.png)
+
+*(File paths pixelated for privacy.)*
+
+The `nas-access-log` task is configured the same way, at 09:00, with its own SKILL.md as Instructions and the Always-allowed tools the agent needs (Bash, Read, Write, Edit):
+
+![Claude Code Cowork task detail — nas-access-log](../images/cowork-nas-task-detail.png)
+
+*(File paths pixelated for privacy.)*
 
 ### Why "Always allowed tools" matters
 

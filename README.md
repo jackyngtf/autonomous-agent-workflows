@@ -84,6 +84,10 @@ python3 rebuild_workbook_demo.py
 
 Both agents are **Scheduled Tasks in Claude Code Cowork** — not cron, not a serverless function. The scheduling layer is what makes this an *agent* rather than a *script*: a scheduled LLM with shell access, pre-approved tools, and no human present.
 
+![Claude Code Cowork — two scheduled tasks running daily](images/cowork-task-list.png)
+
+*(Account name pixelated for privacy.)*
+
 📖 [`docs/how-it-runs-in-claude-code-cowork.md`](docs/how-it-runs-in-claude-code-cowork.md) — the full write-up: how the three files map onto a Cowork task's fields, why the Instructions box holds `SKILL.md` (not the whole procedure), and how this setup removes the daily chore.
 
 ---
