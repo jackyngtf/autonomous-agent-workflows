@@ -32,6 +32,12 @@ Every weekday at 10 AM ──▶ agent wakes up (no human)
 - **Output** — a monthly Excel workbook, one worksheet per day
 - **Reference** — [`examples/avaya-call-log/`](examples/avaya-call-log/)
 
+<details>
+<summary><b>Why not just use existing call-monitoring software?</b></summary>
+
+Commercial call-monitoring tools are expensive and packed with features (queuing analytics, wallboards) we'd never use for simple in/out logging. [Dave Hope's free SMDR Receiver](https://davehope.co.uk/projects/smdr-receiver/) does exactly this — but it's a Windows `.exe` that needs a PC switched on 24/7, and stores CSVs locally on that machine. So the receiver was rebuilt as a [Docker container](https://github.com/jackyngtf/smdr-receiver) that runs on the NAS itself — no extra machine to keep alive, and the CSVs land right where they're consumed. The agent above then turns those daily CSVs into the monthly workbook, unattended.
+</details>
+
 ### Agent 2 — `nas-access-log` (weekdays 9 AM)
 
 Turns Synology NAS file-transfer activity into a monthly access-log spreadsheet.
@@ -55,6 +61,12 @@ Every weekday at 9 AM ──▶ agent wakes up (no human)
 - **Output** — a monthly Excel workbook, one worksheet per business day (consecutive non-working days grouped as `DD-DD`)
 - **Reference** — [`examples/nas-access-log/`](examples/nas-access-log/)
 
+<details>
+<summary><b>Why not just export the logs from the NAS directly?</b></summary>
+
+Synology's Log Center has a **Logs** tab with a single "Export as HTML/CSV" button — but it dumps *everything*, with no time-range filter. To get one day's file-transfer activity, you'd export the entire log set and sift through it by hand. Setting up a dedicated syslog server just to filter and forward was more infrastructure than the job warranted. So the agent queries the NAS's own REST API (`SyslogClient`, `logtype=cifs`, hourly windows) and pulls exactly the records for each missing business day — then assembles them into the monthly workbook, all unattended.
+</details>
+
 ### Try the rebuild step yourself
 
 The core of both agents — rebuilding a workbook from scratch with `xlsxwriter` then validating it — is runnable offline right now, no NAS or credentials needed:
@@ -77,19 +89,6 @@ Both agents are **Scheduled Tasks in Claude Code Cowork** — not cron, not a se
 ---
 
 ## Why this isn't just a script
-
-A plain script does steps 1–6 and stops. These agents **also learn from their own mistakes**:
-
-- Every run appends errors and insights to an append-only archive (`.learnings/`)
-- On the next run, when something goes wrong, the agent **greps the archive** and applies the prior fix instead of repeating the failure
-- Once a month, the agent **consolidates its own knowledge** — merges duplicates, prunes stale entries, promotes durable rules into the operational procedure
-
-So a failure that cost an hour to diagnose the first time costs seconds every time after.
-
-
----
-
-## Why this isn't just a cron job
 
 A plain script does steps 1–6 and stops. These agents **also learn from their own mistakes**:
 

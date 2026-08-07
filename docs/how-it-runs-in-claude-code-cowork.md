@@ -8,12 +8,12 @@ This doc explains the scheduling layer so you can see exactly how the three file
 
 ## The goal: remove a tedious daily task
 
-Every weekday morning, two reports needed to be produced by hand:
+Every weekday morning, two reports needed to be produced by hand. Neither had a clean "export" button that would have made them trivial:
 
-1. **Call logs** — pull yesterday's call records off the PBX, paste them into the monthly spreadsheet, upload it.
-2. **NAS access logs** — fetch the previous day's file-transfer activity from the NAS, paste into the monthly spreadsheet, upload it.
+1. **Call logs** — we needed to record who called in/out on the PBX. Commercial call-monitoring software is expensive and over-featured for simple in/out logging; [Dave Hope's free SMDR Receiver](https://davehope.co.uk/projects/smdr-receiver/) is a Windows `.exe` that would need a PC switched on 24/7. So the receiver was rebuilt as a [Docker container](https://github.com/jackyngtf/smdr-receiver) on the NAS — but that still left the daily chore of turning its CSVs into the monthly workbook. That's what this agent automates.
+2. **NAS access logs** — Synology's Log Center can export logs, but only as a full dump (one "Export as HTML/CSV" button, no time-range filter). Getting one day's file-transfer activity meant exporting everything and sifting through it by hand. A dedicated syslog server was more infrastructure than the job warranted. So this agent queries the NAS's own REST API for exactly the records it needs and assembles them into the monthly workbook.
 
-Each took a chunk of focused time every single day, on every weekday, forever. The goal was to make it **happen on its own at 9–10 AM**, correctly, with a paper trail — so a person never has to do it again unless something breaks.
+Each took a chunk of focused time every single day, on every weekday, forever — with no built-in shortcut. The goal was to make them **happen on their own at 9–10 AM**, correctly, with a paper trail — so a person never has to do it again unless something breaks.
 
 ---
 
