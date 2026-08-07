@@ -26,7 +26,7 @@
 
 ## 1. Overview
 
-The agent reads SMDR (Station Message Detail Recording) CSV files produced by a Dockerized Avaya IP Office 500 call-data receiver, groups them by target monthly workbook, rebuilds each workbook from scratch with `xlsxwriter`, uploads via SMB to a NAS, validates, and deletes successfully-processed source CSVs.
+The agent reads SMDR (Station Message Detail Recording) CSV files produced by a Dockerized Avaya IP Office 500 call-data receiver ([github.com/jackyngtf/smdr-receiver](https://github.com/jackyngtf/smdr-receiver)), groups them by target monthly workbook, rebuilds each workbook from scratch with `xlsxwriter`, uploads via SMB to a NAS, validates, and deletes successfully-processed source CSVs.
 
 ```
 Dockerized SMDR receiver ──▶ daily CSVs on NAS

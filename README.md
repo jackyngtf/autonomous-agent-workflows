@@ -1,53 +1,91 @@
 # Autonomous Agent Workflows
 
-> How I run **scheduled, fully unattended LLM-agent tasks** that do real work every morning — and get better at it over time.
+> How I use **Claude Code Cowork scheduled tasks** to run agents that do my repetitive morning work unattended — and get better at it over time.
 
-Two agents built on this pattern run **daily in production** (weekdays 9 AM and 10 AM), exporting call logs and file-transfer logs to monthly Excel workbooks on a NAS. They've completed 60+ runs each.
+Two daily chores — producing a PBX call-log report and a NAS file-transfer-log report — used to need a person every weekday morning, forever. They're now done by two scheduled agents that run at 9 AM and 10 AM, validate their own output, and remember their mistakes. 60+ unattended runs each.
 
 ---
 
-## What it actually does (concrete example)
+## What it actually does
+
+Two agents, same loop, different data sources:
+
+### Agent 1 — `avaya-call-log` (weekdays 10 AM)
+
+Turns daily PBX call records into a monthly call-log spreadsheet.
 
 ```
 Every weekday at 10 AM ──▶ agent wakes up (no human)
         │
-        │  1. reads SMDR call-record CSVs produced overnight by a Dockerized PBX receiver
+        │  1. reads SMDR call-record CSVs produced overnight by
+        │     a Dockerized PBX receiver (see github.com/jackyngtf/smdr-receiver)
         │  2. rebuilds a monthly Excel workbook from scratch (xlsxwriter)
         │  3. uploads it to a NAS share via SMB
         │  4. re-downloads it to validate (sheet names + row counts match)
         │  5. deletes the now-processed source CSVs
         │  6. writes a structured run report
-        │
         ▼
    monthly call-log workbook on the NAS, one worksheet per day
 ```
 
-**Input** (a daily CSV from the PBX receiver — see [`sample-data/`](sample-data/smdr-receiver/output/smdr_2026-08-04.csv)):
+- **Input** — a daily SMDR CSV → [`sample-data/smdr-receiver/output/smdr_2026-08-04.csv`](sample-data/smdr-receiver/output/smdr_2026-08-04.csv)
+- **Output** — a monthly Excel workbook, one worksheet per day
+- **Reference** — [`examples/avaya-call-log/`](examples/avaya-call-log/)
+
+### Agent 2 — `nas-access-log` (weekdays 9 AM)
+
+Turns Synology NAS file-transfer activity into a monthly access-log spreadsheet.
 
 ```
-Call Start,Connected Time,Ring Time,Caller,Direction,Called Number,...
-2026-08-04 09:03:11,42,3,0298765432,Incoming,9333,...
-2026-08-04 10:05:54,204,5,0400123456,Outgoing,,0400123456,...
+Every weekday at 9 AM ──▶ agent wakes up (no human)
+        │
+        │  1. authenticates to the NAS via REST API
+        │  2. fetches file-transfer log records (SyslogClient, logtype=cifs,
+        │     1-hour windows) for each missing business day
+        │  3. groups records by business day, rebuilds a monthly Excel
+        │     workbook from scratch (xlsxwriter)
+        │  4. uploads it to the NAS via SMB
+        │  5. re-downloads it to validate (sheet names + row counts match)
+        │  6. writes a structured run report
+        ▼
+   monthly access-log workbook on the NAS, one worksheet per business day
 ```
 
-**Output** (a monthly Excel workbook — one worksheet per day, rebuilt every run):
+- **Input** — NAS `cifs` event records → [`sample-data/nas-syslog/nas_access_records_2026-08-04.json`](sample-data/nas-syslog/nas_access_records_2026-08-04.json)
+- **Output** — a monthly Excel workbook, one worksheet per business day (consecutive non-working days grouped as `DD-DD`)
+- **Reference** — [`examples/nas-access-log/`](examples/nas-access-log/)
 
-| Worksheet | Rows |
-|-----------|-----:|
-| `2026-08-04` | 13 |
-| `2026-08-05` | 11 |
-| … | … |
+### Try the rebuild step yourself
 
-You can run this rebuild step yourself right now — no NAS, no credentials needed:
+The core of both agents — rebuilding a workbook from scratch with `xlsxwriter` then validating it — is runnable offline right now, no NAS or credentials needed:
 
 ```bash
 cd sample-data
 pip install xlsxwriter openpyxl
 python3 rebuild_workbook_demo.py
-# → writes AUG_2026_demo.xlsx, validates it (13 rows, 32 cols)
+# → writes AUG_2026_demo.xlsx from the sample SMDR CSV, validates it (13 rows, 32 cols)
 ```
 
-The second agent (9 AM) does the same loop but for Synology NAS **file-transfer logs** — it authenticates via REST API, fetches `cifs` event records, and produces a monthly access-log workbook. See [`sample-data/nas-syslog/`](sample-data/nas-syslog/nas_access_records_2026-08-04.json) for the input format.
+---
+
+## How it runs: Claude Code Cowork
+
+Both agents are **Scheduled Tasks in Claude Code Cowork** — not cron, not a serverless function. The scheduling layer is what makes this an *agent* rather than a *script*: a scheduled LLM with shell access, pre-approved tools, and no human present.
+
+📖 [`docs/how-it-runs-in-claude-code-cowork.md`](docs/how-it-runs-in-claude-code-cowork.md) — the full write-up: how the three files map onto a Cowork task's fields, why the Instructions box holds `SKILL.md` (not the whole procedure), and how this setup removes the daily chore.
+
+---
+
+## Why this isn't just a script
+
+A plain script does steps 1–6 and stops. These agents **also learn from their own mistakes**:
+
+- Every run appends errors and insights to an append-only archive (`.learnings/`)
+- On the next run, when something goes wrong, the agent **greps the archive** and applies the prior fix instead of repeating the failure
+- Once a month, the agent **consolidates its own knowledge** — merges duplicates, prunes stale entries, promotes durable rules into the operational procedure
+
+So a failure that cost an hour to diagnose the first time costs seconds every time after.
+
 
 ---
 
@@ -94,7 +132,7 @@ So a failure that cost an hour to diagnose the first time costs seconds every ti
 
 The key insight: **the archive is for audit, the work-instruction is for operations.** New knowledge gets written to both — the archive entry is the history, the work-instruction edit is the living rule.
 
-📖 Deep dives: [`docs/architecture.md`](docs/architecture.md) · [`docs/self-improvement-loop.md`](docs/self-improvement-loop.md)
+📖 Deep dives: [`docs/how-it-runs-in-claude-code-cowork.md`](docs/how-it-runs-in-claude-code-cowork.md) (the scheduling layer) · [`docs/architecture.md`](docs/architecture.md) · [`docs/self-improvement-loop.md`](docs/self-improvement-loop.md)
 
 ---
 
@@ -111,6 +149,7 @@ examples/                    ← sanitized reference implementations
   nas-access-log/            ← SKILL.md + WORKINSTRUCTION.md + sample-report.md
 
 docs/                        ← the architecture & patterns explained
+  how-it-runs-in-claude-code-cowork.md   ← the scheduling layer (start here)
   architecture.md
   self-improvement-loop.md
 ```
