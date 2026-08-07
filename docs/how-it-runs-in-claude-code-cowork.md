@@ -19,11 +19,7 @@ Each took a chunk of focused time every single day, on every weekday, forever �
 
 ## The scheduling layer: Claude Code Cowork
 
-A Scheduled Task in Cowork is a recurring, unattended agent run. Here are the two production tasks — both show green (success) runs day after day:
-
-![Claude Code Cowork scheduled tasks — two daily agents](../images/cowork-task-list.png)
-
-You configure five things:
+A Scheduled Task in Cowork is a recurring, unattended agent run. You configure five things:
 
 | Field | What it does | Avaya example | NAS example |
 |-------|-------------|---------------|-------------|
