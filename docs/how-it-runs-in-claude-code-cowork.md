@@ -62,13 +62,13 @@ Here's what one of these tasks looks like configured — the `avaya-call-log` ta
 
 ![Claude Code Cowork task detail — avaya-call-log](../images/cowork-avaya-task-detail.png)
 
-*(File paths pixelated for privacy.)*
+*(File paths redacted.)*
 
 The `nas-access-log` task is configured the same way, at 09:00, with its own SKILL.md as Instructions and the Always-allowed tools the agent needs (Bash, Read, Write, Edit):
 
 ![Claude Code Cowork task detail — nas-access-log](../images/cowork-nas-task-detail.png)
 
-*(File paths pixelated for privacy.)*
+*(File paths redacted.)*
 
 ### Why "Always allowed tools" matters
 
