@@ -23,8 +23,6 @@ A Scheduled Task in Cowork is a recurring, unattended agent run. Here are the tw
 
 ![Claude Code Cowork scheduled tasks — two daily agents](../images/cowork-task-list.png)
 
-*(Account name in the sidebar pixelated for privacy.)*
-
 You configure five things:
 
 | Field | What it does | Avaya example | NAS example |
