@@ -80,10 +80,37 @@ At **16:22:42 +10:00 on 22 September 2026**, the two tested scripts were deploye
 | Driver | `5c6b1c57af2d542bea5067f2ac7298c0a029785b2c219d1bd5071c9e53f77b19` |
 | Engine | `bfa41f5ed860df0100fe382d13d4cf890b1781c24319308ab30da66e10037405` |
 
-The configuration hash was unchanged and mode remained **shadow** before and after deployment. A second direct read confirmed both deployed hashes and no leftover staging files. Deployment did not execute the operational engine. The user's post-fix Cowork run remains pending; no new planning or swap result is claimed. The earlier source hashes and **15:27 result of 30 HELD, 0 PLANNED and 0 SWAPPED** remain the historical record.
+The configuration hash was unchanged and mode remained **shadow** before and after deployment. A second direct read confirmed both deployed hashes and no leftover staging files. Deployment did not execute the operational engine. At that point, the user's post-fix Cowork run was pending. The earlier source hashes and **15:27 result of 30 HELD, 0 PLANNED and 0 SWAPPED** remain the historical record.
+
+## Post-deployment shadow run: 22 September 2026
+
+The user manually reran Cowork after deployment. Two retrieved reports record an intermediate pass at **16:35:14** and a final pass at **16:35:49**; no timezone is inferred from those report times. Both contain the **same 27 input filenames**, compared after removing status labels, against a **509-entry manifest**.
+
+| Reported field | Intermediate pass | Final pass |
+|---|---:|---:|
+| Inbox inputs | 27 | 27 |
+| `HELD` | 27 | 8 |
+| `PLANNED` | 0 | 19 |
+
+The report comparison identifies **19 inputs changing from HELD to PLANNED**, with **eight remaining HELD**. All 27 inputs were present in the earlier 30-input cohort; three earlier inputs were absent and none were new. The reason for the three absences is not established. The final report therefore records actual planning progress within this 27-input attempt, not a controlled comparison of two identical 30-input runs or a completed document replacement.
+
+All eight held cases still require document-identity review. Three rename suggestions involve a questionnaire suffix; filename/code matching does not independently establish document type from content. These suggestions are not approval to rename files or accept targets.
+
+| Retrieved report | Bytes | SHA-256 |
+|---|---:|---|
+| Intermediate pass | 13,543 | `9c93197804f68b1803213ce765dcc53b6a0960912302558e7dbd8cec5e272017` |
+| Final pass | 10,560 | `d295989bebeb6524703cd80a907ea8f080054393b6fbbef09d1a04a81e12f1db` |
+
+Read-only follow-up confirmed 27 inbox PDFs, the unchanged configuration hash with mode **shadow**, and both deployed source hashes unchanged. The final report records **0 SWAPPED, 0 ERROR and 0 PARTIAL**. This manually triggered attempt does not establish live replacement, rollback, scheduler reliability or notification delivery, and remains outside the 92-file Avaya/NAS reporting ledger.
+
+## Live publication limitation found after the shadow run
+
+Static review of the deployed source found that the driver parses swapped-file output using a path pattern that stops at whitespace (driver line 159; engine lines 465–466). All 19 planned destination paths contain whitespace, so none match that parser. If a live engine run marked those local files `SWAPPED`, the driver could skip the upload and HTTP-verification loops because its parsed completion list is empty, while still reaching inbox cleanup for successful local items (driver lines 196–197).
+
+This is a source-level finding, not an observed live failure: the reviewed run remained shadow and did not enter that branch. **The 19 planned items are not established as safe for live publication.** A separate private guard candidate now accepts spaced paths, checks complete publication records before remote writes, and requires every intended target to be uploaded and hash-verified before inbox cleanup. Nine offline test methods passed: six shadow regressions and three publication tests covering 11 synthetic scenarios. The live-publication tests simulate engine output and SMB/HTTP; they do not execute a real live engine. This candidate has not been deployed, and general production rollback/concurrency safety is not established.
 
 ## What this record does not establish
 
-No successful live swap, rollback, transactional guarantee, unattended success rate or notification delivery is established. Verified deployment does not establish a successful post-fix execution. The public offline demo remains limited to Avaya and NAS reporting.
+No successful live swap, rollback, transactional guarantee, unattended success rate or notification delivery is established. The post-deployment evidence establishes reported shadow planning outcomes, not completed replacements. The public offline demo remains limited to Avaya and NAS reporting.
 
 [Read the case](../case-study/07-etms-document-handoff.md) · [Inspect the task reference](../../examples/etms-doc-swap/README.md) · [Claim index](claim-index.md).

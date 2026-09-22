@@ -4,7 +4,7 @@
 
 兩個報表流程結合排程啟動的 agent 工作階段、書面操作程序及 Python 資料處理。目的是在保留既有表格紀錄的前提下，將缺漏且已完成的日期加入月報。Agent 負責協調工作及處理例外；排程器負責啟動工作階段。
 
-第三項工作 [eTMS 文件更新](case-study/07-etms-document-handoff.zh-TW.md) 將檔案規劃與執行交給外置 driver。[2026 年 9 月 22 日的唯讀部署檢視](evidence/etms-deployment-review-2026-09-22.zh-TW.md)已檢查 driver、engine 及 shadow 設定。程式在 shadow 跳過正式文件替換，但仍處理收件區清理及上傳報告；driver 回傳零結束碼不代表 engine 成功。另行評估的手動 shadow 報告記錄 30 HELD、0 SWAPPED；通過離線檢查的修正其後已部署，設定維持 shadow，修正後的 Cowork 執行仍待觸發。以下工作簿流程只適用於報表工作。
+第三項工作 [eTMS 文件更新](case-study/07-etms-document-handoff.zh-TW.md) 將檔案規劃與執行交給外置 driver。[2026 年 9 月 22 日的唯讀部署檢視](evidence/etms-deployment-review-2026-09-22.zh-TW.md)已檢查 driver、engine 及 shadow 設定。程式在 shadow 跳過正式文件替換，但仍處理收件區清理及上傳報告；driver 回傳零結束碼不代表 engine 成功。另行評估的手動 shadow 報告記錄 30 HELD、0 SWAPPED；通過離線檢查的修正其後已部署，設定維持 shadow，其後手動執行以較早 30 項的 27 項子集為輸入，記錄 19 PLANNED、8 HELD、0 SWAPPED。以下工作簿流程只適用於報表工作。
 
 本文描述專案的設計。不同時期的程式，驗證深度並不一致。[離線示範](../demo/README.zh-TW.md)是另外整理並加強檢查的本機模擬，不能證明每次正式執行都通過相同檢查。
 

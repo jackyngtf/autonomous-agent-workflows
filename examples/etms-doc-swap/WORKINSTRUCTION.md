@@ -49,6 +49,6 @@ These are expected fields, not a fabricated sample run. Private reports may need
 
 ## What would support a stronger claim
 
-Deployment presence, configuration and selected source paths have now been inspected. Controlled execution evidence and failure tests are still needed to assess planning, permitted mutations and recovery. A completed live claim additionally requires an authorised execution record and before/after evidence. The assessed user-triggered Cowork attempt remains a held shadow outcome. Neither it nor the offline candidate checks establish a successful scheduled run or a live swap. The repair was later deployed with verified hashes and shadow configuration; the post-fix Cowork run remains pending.
+Deployment presence, configuration and selected source paths have now been inspected. Controlled execution evidence and failure tests are still needed to assess planning, permitted mutations and recovery. A completed live claim additionally requires an authorised execution record and before/after evidence. The assessed user-triggered Cowork attempt remains a held shadow outcome. Neither it nor the offline candidate checks establish a successful scheduled run or a live swap. The repair was later deployed with verified hashes and shadow configuration; a later manual run reported 19 PLANNED, 8 HELD and 0 SWAPPED on a 27-input subset of the earlier 30. All eight held cases require document-identity review; rename suggestions are not approvals.
 
 Related: [case boundary](README.md) · [entry contract](SKILL.md) · [workflow index](../README.md).
