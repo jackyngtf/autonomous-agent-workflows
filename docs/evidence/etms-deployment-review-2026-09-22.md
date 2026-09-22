@@ -107,7 +107,18 @@ Read-only follow-up confirmed 27 inbox PDFs, the unchanged configuration hash wi
 
 Static review of the deployed source found that the driver parses swapped-file output using a path pattern that stops at whitespace (driver line 159; engine lines 465–466). All 19 planned destination paths contain whitespace, so none match that parser. If a live engine run marked those local files `SWAPPED`, the driver could skip the upload and HTTP-verification loops because its parsed completion list is empty, while still reaching inbox cleanup for successful local items (driver lines 196–197).
 
-This is a source-level finding, not an observed live failure: the reviewed run remained shadow and did not enter that branch. **The 19 planned items are not established as safe for live publication.** A separate private guard candidate now accepts spaced paths, checks complete publication records before remote writes, and requires every intended target to be uploaded and hash-verified before inbox cleanup. Nine offline test methods passed: six shadow regressions and three publication tests covering 11 synthetic scenarios. The live-publication tests simulate engine output and SMB/HTTP; they do not execute a real live engine. This candidate has not been deployed, and general production rollback/concurrency safety is not established.
+This is a source-level finding, not an observed live failure: the reviewed run remained shadow and did not enter that branch. **The 19 planned items are not established as safe for live publication.** A separate private guard candidate now accepts spaced paths, checks complete publication records before remote writes, and requires every intended target to be uploaded and hash-verified before inbox cleanup. Nine offline test methods passed: six shadow regressions and three publication tests covering 11 synthetic scenarios. The live-publication tests simulate engine output and SMB/HTTP; they do not execute a real live engine. At this 22 September snapshot, the candidate was not deployed; the later deployment is recorded below. General production rollback/concurrency safety is not established.
+
+## Guard deployment and live configuration: 23 September 2026
+
+At **08:41:54 +10:00 on 23 September 2026**, the tested guard driver was deployed with explicit user authorisation. The previous driver was backed up and its hash verified; the new driver was read back and verified **before** switching configuration. The configuration was also backed up, and a field-only replacement plus deep JSON comparison confirmed that its only change was **`shadow` → `live`**.
+
+| Artifact | SHA-256 |
+|---|---|
+| Deployed guard driver | `f2d7849743d5d8829f132a0d43a78dbc4280cc0da0e96eca780a97f94eea3b69` |
+| Unchanged engine | `bfa41f5ed860df0100fe382d13d4cf890b1781c24319308ab30da66e10037405` |
+
+A second independent read confirmed driver, engine and configuration hashes, both backups and no leftover staging files. **No operational engine was executed during deployment; the first live Cowork run remains pending.** The 22 September source snapshots and shadow outcomes remain historical evidence, not live replacement results.
 
 ## What this record does not establish
 

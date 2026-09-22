@@ -55,7 +55,7 @@ Cowork 摘要列出 **22 項目標缺漏與八項未配對輸入**。其後的�
 
 2026 年 9 月 22 日 16:22:42 +10:00，已測試修正完成部署，備份及部署後取回摘要值均已核對，設定維持 shadow。[部署跟進](../evidence/etms-deployment-review-2026-09-22.zh-TW.md#部署跟進2026-年-9-月-22-日)將新摘要值與原先檢視的原始碼分開記錄。其後使用者於 16:35 手動重跑 Cowork。同一批 27 項輸入的兩份報告，由 27 HELD 轉為 **19 PLANNED、8 HELD、0 SWAPPED**。這 27 項屬較早 30 項的子集，三項缺席的原因尚未確立。八項暫緩個案仍需核對文件身份，改名建議不代表批准。[部署後報告證據](../evidence/etms-deployment-review-2026-09-22.zh-TW.md#部署後-shadow-執行2026-年-9-月-22-日)支持 shadow 規劃結果，不代表已驗證 live 替換、回復或排程可靠性。
 
-其後的[靜態發現](../evidence/etms-deployment-review-2026-09-22.zh-TW.md#shadow-執行後發現的-live-發佈限制)指出，live 發佈解析方式無法處理含空白的路徑，可能在本機替換後跳過上傳檢查，卻仍進入收件區清理。Shadow 結果不代表已可進行 live 更新；另一項私人防護候選版本已通過九項離線測試方法，尚未部署。
+其後的[靜態發現](../evidence/etms-deployment-review-2026-09-22.zh-TW.md#shadow-執行後發現的-live-發佈限制)指出，live 發佈解析方式無法處理含空白的路徑，可能在本機替換後跳過上傳檢查，卻仍進入收件區清理。Shadow 結果不代表已可進行 live 更新；私人防護版本通過九項離線測試方法，於 9 月 23 日完成部署，備份已核對。設定現為 live；首次 live Cowork 執行仍待確認。[附日期跟進](../evidence/etms-deployment-review-2026-09-22.zh-TW.md#防護版部署與-live-設定2026-年-9-月-23-日)記錄新的 driver 摘要值。
 
 eTMS 證據與可執行的 Avaya／NAS 示範，以及 92 份報表檔案清單分開。
 

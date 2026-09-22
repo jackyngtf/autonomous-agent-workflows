@@ -39,7 +39,7 @@ def save(parts, filename):
 
 def architecture(zh):
     title = '每次更新，都經過明確的檢查' if zh else 'Every update has a boundary.'
-    p = start(title, 'Reporting design and the eTMS post-fix shadow report: 19 planned, 8 held, zero swapped. A separate live-publication defect remains unresolved in deployment.', 930)
+    p = start(title, 'Reporting design and the eTMS post-fix shadow report: 19 planned, 8 held, zero swapped. The guard was deployed on 23 September and configuration switched to live; live execution remains unverified.', 930)
     text(p, 48, 48, 'AUTONOMOUS AGENT WORKFLOWS', 14, GREEN, 700)
     text(p, 48, 104, title, 38, INK, 650)
     text(p, 48, 144, '排程啟動工作；Agent 解讀情況；Python 處理及比較資料。' if zh else 'A schedule starts the session. The agent interprets. Python processes and compares.', 20, MUTED)
@@ -70,7 +70,7 @@ def architecture(zh):
     text(p, 72, 738, '第三項工作 / eTMS 文件換版交接' if zh else 'THIRD JOB / eTMS document-update handoff', 20, GREEN, 650)
     text(p, 72, 779, '外置 driver · Shadow：19 PLANNED / 8 HELD / 0 SWAPPED' if zh else 'External driver · shadow: 19 PLANNED / 8 HELD / 0 SWAPPED', 22, INK, 600)
     text(p, 72, 819, '2026-09-22 16:35 手動重跑 · 27 份輸入，未釐清配對保持 HELD。' if zh else '22 Sep 2026, 16:35 manual rerun · 27 inputs; unresolved identities stay held.', 18)
-    text(p, 72, 858, 'Shadow 規劃已驗證；live 發布仍有缺陷，尚未執行換檔。' if zh else 'Shadow planning observed. A live-publication defect remains; no swaps performed.', 17, MUTED)
+    text(p, 72, 858, '9 月 23 日防護版已部署、設定切換 live；首次 live 執行待確認。' if zh else '23 Sep: guard deployed; mode live. First live execution unverified.', 17, MUTED)
     save(p, 'workflow-overview.zh-TW.svg' if zh else 'workflow-overview.svg')
 
 
