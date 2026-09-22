@@ -1,50 +1,33 @@
 ---
-name: avaya-call-log
-description: Avaya IP500 Call Log Export — read SMDR CSV files from a Dockerized PBX receiver, rebuild a monthly Excel workbook with xlsxwriter, upload via SMB, validate, and clean up processed CSVs. Runs weekdays at 10 AM.
+name: avaya-call-log-reference
+description: Design reference for a scheduled SMDR-to-workbook reporting workflow; not a deployable integration.
 ---
 
-# Avaya IP500 Call Log Automation
+# Avaya reporting: entry instructions
 
-> 🔒 **Sanitized reference excerpt.** Mirrors the structure of a production agent. Realistic dummy values used — see [`WORKINSTRUCTION.md`](WORKINSTRUCTION.md) "What to change for your setup" to adapt.
+[**English**](SKILL.md) · [繁體中文](SKILL.zh-TW.md)
 
-You are running a scheduled task. No user is present. Follow all steps precisely.
+> Public design reference. These instructions explain the intended task contract; they provide no live NAS access. Use the [offline demo](../../demo/README.md) to run the synthetic example.
 
-## Pre-flight
+Read [WORKINSTRUCTION.md](WORKINSTRUCTION.md) before processing. Establish the configured working scope, source schema, `Australia/Melbourne` cutoff and supported workbook contract. Search incident history when a specific error or uncertainty makes it relevant, and check whether the finding is still applicable.
 
-**Read `WORKINSTRUCTION.md` in full — it is your complete operational ruleset** (Section 0 critical rules, Step 0 pre-flight, the full procedure, reference implementation, and troubleshooting). Follow it exactly.
+## Expected task behaviour
 
-Do **NOT** read the `.learnings/` files (`LEARNINGS.md`, `ERRORS.md`, `FEATURE_REQUESTS.md`) wholesale. They are append-only audit archives. Consult them via targeted `grep -rn "<keyword>" .learnings/` **only** when you hit an error, an unexpected result, or an uncertain decision (e.g. SMB connect fails → `grep -rn "smb"`; a CSV won't parse → `grep -rn "nul\|encoding"`).
+- Plan only missing dates completed before the current Melbourne day.
+- Treat a confirmed missing destination differently from an unreadable or inaccessible workbook.
+- Preserve existing tabular records within the supported workbook contract; rebuilding can replace the file.
+- Validate a candidate against independently prepared expected records before publication.
+- In a live adapter, retrieve and verify the published copy before considering source cleanup.
+- Keep malformed or unverified source files for review; report the reason.
+- Stop when ambiguity or a policy decision exceeds the task's configured authority.
+- Keep credentials and sensitive record values out of operational summaries.
 
-Run **Step 0** of the work instruction first: it self-heals Python dependencies (`pysmb`) and runs the archive size guard that keeps `.learnings/` bounded.
+A failed post-upload check can block cleanup but cannot undo an earlier upload. Live publication, backup and recovery behaviour must be defined separately.
 
-## Working Directory
+## Reporting and knowledge
 
-All work happens in: `<your-working-directory>/avaya-call-log`
+Record the attempt's execution mode, cutoff, plan, outcome, verification scope, cleanup decision and unresolved questions. Use [the synthetic report](sample-report.md) as a format illustration, not a source of production results.
 
-Use Python for all file operations — SMB (`pysmb`) for NAS access, `csv` module for reading SMDR data.
+Add new observations with provenance. A procedure change needs a reason and an appropriate scope check; recording a lesson is not permission to change deletion policy. See [knowledge maintenance](../../docs/self-improvement-loop.md).
 
-## Key Rules
-
-- Do **NOT** process today's CSV — only up to yesterday (Melbourne timezone, AEST UTC+10).
-- Do **NOT** delete a CSV until its worksheet is confirmed in the uploaded workbook.
-- Do **NOT** save or expose NAS passwords/credentials in reports.
-- Do **NOT** overwrite valid worksheets.
-- If SMB connection fails, stop and report clearly.
-- **Never** use ZIP-level merge to modify XLSX workbooks. Always rebuild from scratch with `xlsxwriter`.
-- Always use keyword arguments for the `pysmb` `SMBConnection` constructor.
-- If user approval would be needed (e.g. overwrite), stop and produce the planned export table instead of modifying workbooks.
-
-## Report
-
-Save the final run report as:
-`<your-working-directory>/avaya-call-log/reports/avaya_call_log_report_YYYY-MM-DD.md`
-
-The report must include:
-- **Run Summary** table (date/time, SMB connection result, CSVs found, workbooks processed, sheets added, CSVs deleted)
-- **Export Summary** table (CSV File, Target Workbook, Worksheet, Rows, Status)
-- **Skipped Items** section (today's CSV, already-existing sheets)
-- **Issues / Open Questions** section
-
-## Post-run
-
-After completing the run (or if an error occurs), **append** any genuinely new learnings or errors to the `.learnings/` archives — append-only, never rewrite history. Do not duplicate existing entries. The Step 0 size guard keeps these files bounded, and the Step 9 month-end consolidation merges and prunes them.
+These are intended constraints, not a claim that written instructions alone enforce them.

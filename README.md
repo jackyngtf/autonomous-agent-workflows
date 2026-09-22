@@ -1,189 +1,100 @@
 # Autonomous Agent Workflows
 
-> How I use **Claude Code Cowork scheduled tasks** to run agents that do my repetitive morning work unattended — and get better at it over time.
+**English** · [繁體中文](README.zh-TW.md)
 
-Two daily chores — producing a PBX call-log report and a NAS file-transfer-log report — used to need a person every weekday morning, forever. They're now done by two scheduled agents that run at 9 AM and 10 AM, validate their own output, and remember their mistakes. 60+ unattended runs each.
+### From daily records to monthly reports, with a check before the next step
 
----
+PBX call records and NAS file-transfer activity needed to become monthly Excel reports. I built two scheduled workflows around Python processing, written operating procedures and Claude Cowork sessions. The work included handling incomplete inputs, preserving existing records, diagnosing failed runs and leaving a report someone could review.
 
-## What it actually does
+This portfolio follows those decisions through three operational incidents. It also includes a runnable reference that demonstrates successful updates, repeat runs and a validation failure using fictional data.
 
-Two agents, same loop, different data sources:
+[Try the offline demo](#try-it-locally) · [Read the case study](docs/case-study/01-context-and-role.md) · [Check the evidence](docs/evidence/README.md)
 
-### Agent 1 — `avaya-call-log` (weekdays 10 AM)
+![Two reporting workflows, deterministic processing and verification boundaries](images/workflow-overview.svg)
 
-Turns daily PBX call records into a monthly call-log spreadsheet.
+*The diagram describes the operating design. Historical checks varied by run; the public demo has its own explicit, tested scope.*
 
-```
-Every weekday at 10 AM ──▶ agent wakes up (no human)
-        │
-        │  1. reads SMDR call-record CSVs produced overnight by
-        │     a Dockerized PBX receiver (see github.com/jackyngtf/smdr-receiver)
-        │  2. rebuilds a monthly Excel workbook from scratch (xlsxwriter)
-        │  3. uploads it to a NAS share via SMB
-        │  4. re-downloads it to validate (sheet names + row counts match)
-        │  5. deletes the now-processed source CSVs
-        │  6. writes a structured run report
-        ▼
-   monthly call-log workbook on the NAS, one worksheet per day
-```
+## Two workflows, one reporting problem
 
-- **Input** — a daily SMDR CSV → [`sample-data/smdr-receiver/output/smdr_2026-08-04.csv`](sample-data/smdr-receiver/output/smdr_2026-08-04.csv)
-- **Output** — a monthly Excel workbook, one worksheet per day
-- **Reference** — [`examples/avaya-call-log/`](examples/avaya-call-log/)
+| | PBX call logs | NAS access logs |
+|---|---|---|
+| Source | Daily Avaya SMDR CSVs from a [Dockerised receiver](https://github.com/jackyngtf/smdr-receiver) | File-transfer records queried from the NAS API |
+| Intended schedule | Weekdays, 10:00 | Weekdays, 09:00 |
+| Output | Monthly workbook, with dated call-log sheets | Monthly workbook, with dated or grouped access-log sheets |
+| Useful judgement | Reject malformed inputs, investigate authentication failures, identify safe recovery steps | Inspect missing coverage, diagnose API limits, report gaps that cannot be recovered |
+| Processing | Python parses records and rebuilds tabular workbooks | Python groups dated records and rebuilds tabular workbooks |
 
-<details>
-<summary><b>Why not just use existing call-monitoring software?</b></summary>
+The schedules describe configured routines in the historical record. They are not a claim of continuous operation or current uptime. [Follow both data paths →](docs/case-study/02-two-reporting-workflows.md)
 
-Commercial call-monitoring tools are expensive and packed with features (queuing analytics, wallboards) we'd never use for simple in/out logging. [Dave Hope's free SMDR Receiver](https://davehope.co.uk/projects/smdr-receiver/) does exactly this — but it's a Windows `.exe` that needs a PC switched on 24/7, and stores CSVs locally on that machine. So the receiver was rebuilt as a [Docker container](https://github.com/jackyngtf/smdr-receiver) that runs on the NAS itself — no extra machine to keep alive, and the CSVs land right where they're consumed. The agent above then turns those daily CSVs into the monthly workbook, unattended.
-</details>
+## What the agent does, and what the code does
 
-### Agent 2 — `nas-access-log` (weekdays 9 AM)
+The agent reads the operating procedure, inspects the current state, selects permitted actions and interprets unexpected results. Python handles record parsing, date handling, workbook generation and explicit checks. A scheduled session makes this recurring; the agent's role is the interpretation and exception handling around those operations.
 
-Turns Synology NAS file-transfer activity into a monthly access-log spreadsheet.
+Instructions are separated from searchable incident history. A useful finding can become a revised operating rule, with a record of why it changed. That is the project's **self-improvement loop**: maintaining operational knowledge, with no model training involved.
 
-```
-Every weekday at 9 AM ──▶ agent wakes up (no human)
-        │
-        │  1. authenticates to the NAS via REST API
-        │  2. fetches file-transfer log records (SyslogClient, logtype=cifs,
-        │     1-hour windows) for each missing business day
-        │  3. groups records by business day, rebuilds a monthly Excel
-        │     workbook from scratch (xlsxwriter)
-        │  4. uploads it to the NAS via SMB
-        │  5. re-downloads it to validate (sheet names + row counts match)
-        │  6. writes a structured run report
-        ▼
-   monthly access-log workbook on the NAS, one worksheet per business day
-```
+[Architecture and tradeoffs](docs/architecture.md) · [Runtime and scheduling](docs/how-it-runs-in-claude-code-cowork.md) · [Incident-to-instruction loop](docs/self-improvement-loop.md)
 
-- **Input** — NAS `cifs` event records → [`sample-data/nas-syslog/nas_access_records_2026-08-04.json`](sample-data/nas-syslog/nas_access_records_2026-08-04.json)
-- **Output** — a monthly Excel workbook, one worksheet per business day (consecutive non-working days grouped as `DD-DD`)
-- **Reference** — [`examples/nas-access-log/`](examples/nas-access-log/)
+## Three incidents that changed the procedure
 
-<details>
-<summary><b>Why not just export the logs from the NAS directly?</b></summary>
+| What happened | What it taught me |
+|---|---|
+| A rebuilt NAS workbook contained duplicated headers, while a count check still passed | An expected value derived through the same faulty path is not an independent check. Compare against the original records. |
+| Reading a large workbook exceeded an execution time limit | Change the serialization boundary, then check the resulting records. Treat a recorded runtime as one observation, not a benchmark. |
+| The scheduled environment failed, and the destination later contained updates absent from local reports | Reinspect the actual destination before planning recovery. Keep manual recovery and updates of unknown origin visible. |
 
-Synology's Log Center has a **Logs** tab with a single "Export as HTML/CSV" button — but it dumps *everything*, with no time-range filter. To get one day's file-transfer activity, you'd export the entire log set and sift through it by hand. Setting up a dedicated syslog server just to filter and forward was more infrastructure than the job warranted. So the agent queries the NAS's own REST API (`SyslogClient`, `logtype=cifs`, hourly windows) and pulls exactly the records for each missing business day — then assembles them into the monthly workbook, all unattended.
-</details>
+[Read the incidents and recovery decisions →](docs/case-study/04-incidents-and-recovery.md)
 
-### Try the rebuild step yourself
+## What the available record supports
 
-The core of both agents — rebuilding a workbook from scratch with `xlsxwriter` then validating it — is runnable offline right now, no NAS or credentials needed:
+| Recorded item | Scope |
+|---|---|
+| 47 Avaya and 45 NAS run-report files | Local artifacts found during the 22 September 2026 review, excluding archived copies. Includes failures and recovery reports; not a count of successful unattended runs. |
+| 313,721 NAS data rows in one rebuilt workbook | Reported on 3 August 2026. The report records a 23.6-second parse and a 22.8-second write; these are individual observations. |
+| 40,179 NAS rows added across four sheets | Reported in the **manual/native Windows recovery** on 15 September 2026. Some older dates remained unavailable from the queried source. |
+| 21 Avaya rows added, with seven prior sheets checked | Reported in the native recovery on 11 September 2026. |
+
+These are report-derived outcomes, not an independent audit of the live NAS. The retained record does not establish uptime, a success rate, time saved or zero data loss.
+
+[Operating record](docs/case-study/05-operating-record.md) · [Evidence and source boundaries](docs/evidence/README.md) · [Limitations](docs/case-study/06-lessons-and-limitations.md)
+
+## Try it locally
+
+Use Python 3.11 or later. Both paths run offline with synthetic fixtures, without a NAS account, Claude session or API key.
 
 ```bash
-cd sample-data
-pip install xlsxwriter openpyxl
-python3 rebuild_workbook_demo.py
-# → writes AUG_2026_demo.xlsx from the sample SMDR CSV, validates it (13 rows, 32 cols)
+python -m pip install -r requirements.txt
+python -m demo --workflow all --output-dir output/demo
+python -m unittest discover -s tests -v
+python scripts/check_docs.py
 ```
 
----
+The first run creates an Avaya workbook and a NAS workbook under `output/demo`, plus a bilingual run report and machine-readable evidence. Run the same demo command again: it reports `NO_CHANGE` without rewriting an already matching workbook.
 
-## How it runs: Claude Code Cowork
+Then try a deliberately corrupted candidate:
 
-Both agents are **Scheduled Tasks in Claude Code Cowork** — not cron, not a serverless function. The scheduling layer is what makes this an *agent* rather than a *script*: a scheduled LLM with shell access, pre-approved tools, and no human present.
-
-📖 [`docs/how-it-runs-in-claude-code-cowork.md`](docs/how-it-runs-in-claude-code-cowork.md) — the full write-up: how the three files map onto a Cowork task's fields, why the Instructions box holds `SKILL.md` (not the whole procedure), and how this setup removes the daily chore.
-
----
-
-## Why this isn't just a script
-
-A plain script does steps 1–6 and stops. These agents **also learn from their own mistakes**:
-
-- Every run appends errors and insights to an append-only archive (`.learnings/`)
-- On the next run, when something goes wrong, the agent **greps the archive** and applies the prior fix instead of repeating the failure
-- Once a month, the agent **consolidates its own knowledge** — merges duplicates, prunes stale entries, promotes durable rules into the operational procedure
-
-So a failure that cost an hour to diagnose the first time costs seconds every time after.
-
----
-
-## The three-layer architecture
-
-```
-                    ┌─────────────────────────────────────────┐
-   Scheduler ─────▶ │  SKILL.md        (entry point)          │
-  (daily 9/10 AM)   │  the minimal "how to start" contract    │
-                    └────────────────────┬────────────────────┘
-                                         │ read in full
-                                         ▼
-                    ┌─────────────────────────────────────────┐
-                    │  WORKINSTRUCTION.md  (operational truth) │
-                    │  step-by-step procedure + critical rules │
-                    │  THIS is the authoritative ruleset       │
-                    └────────────────────┬────────────────────┘
-                                         │ consult on errors only
-                                         ▼
-                    ┌─────────────────────────────────────────┐
-                    │  .learnings/       (append-only archive) │
-                    │  LEARNINGS.md  ERRORS.md  FEATURE_*.md   │
-                    │  grep-only — NEVER read wholesale        │
-                    └─────────────────────────────────────────┘
+```bash
+python -m demo --workflow all --scenario blocked --output-dir output/blocked
 ```
 
-| Layer | File | Read when | Written when |
-|-------|------|-----------|--------------|
-| **Entry** | `SKILL.md` | Every run (start) | Rarely — stable contract |
-| **Truth** | `WORKINSTRUCTION.md` | Every run (in full) | When an operational rule changes |
-| **Archive** | `.learnings/*.md` | **Only via `grep`** on error/uncertainty | After every run (append-only) |
+**Exit code 2 is expected.** The demo detects the staged mismatch and blocks replacement of the existing workbook. The fictional inputs remain in place. This is a local simulation of the publication boundary; it does not upload to a NAS or delete source files.
 
-The key insight: **the archive is for audit, the work-instruction is for operations.** New knowledge gets written to both — the archive entry is the history, the work-instruction edit is the living rule.
+![Synthetic workbook output and a blocked candidate, generated from the offline demo](images/demo-preview.svg)
 
-📖 Deep dives: [`docs/how-it-runs-in-claude-code-cowork.md`](docs/how-it-runs-in-claude-code-cowork.md) (the scheduling layer) · [`docs/architecture.md`](docs/architecture.md) · [`docs/self-improvement-loop.md`](docs/self-improvement-loop.md)
+[Walk through the demo and checks →](demo/README.md)
 
----
+## Read the case study
 
-## Repository contents
+1. [The reporting problem and my role](docs/case-study/01-context-and-role.md)
+2. [Two sources, two monthly workbooks](docs/case-study/02-two-reporting-workflows.md)
+3. [What “verified” needs to mean](docs/case-study/03-integrity-and-verification.md)
+4. [Failures, changes and recovery](docs/case-study/04-incidents-and-recovery.md)
+5. [The operating record and its limits](docs/case-study/05-operating-record.md)
+6. [What I would improve next](docs/case-study/06-lessons-and-limitations.md)
 
-```
-sample-data/                 ← realistic dummy inputs + a runnable demo
-  smdr-receiver/output/      ← daily SMDR CSV (what the PBX receiver writes)
-  nas-syslog/                ← NAS file-transfer log records (JSON)
-  rebuild_workbook_demo.py   ← run this to see the rebuild step work, offline
+The [reference instructions](examples/README.md) explain the operational contracts. The [demo](demo/README.md) is the executable public reference. Neither is a ready-to-deploy replacement for the private environment.
 
-examples/                    ← sanitized reference implementations
-  avaya-call-log/            ← SKILL.md + WORKINSTRUCTION.md + sample-report.md
-  nas-access-log/            ← SKILL.md + WORKINSTRUCTION.md + sample-report.md
+## Public-copy boundaries
 
-docs/                        ← the architecture & patterns explained
-  how-it-runs-in-claude-code-cowork.md   ← the scheduling layer (start here)
-  architecture.md
-  self-improvement-loop.md
-```
+The repository contains authored case studies, sanitized source summaries, synthetic inputs and local demonstration code. It excludes production credentials, session state, raw company records and live integration adapters. Historical screenshots illustrate task configuration; they do not establish present-day scheduler health. [Media notes](images/README.md) · [Security and data boundaries](SECURITY.md)
 
-Each example uses **realistic dummy values** for everything (IPs `192.168.1.100`, account `svc_calllog`, share `shared`). Every example doc has a **"What to change for your setup"** table showing exactly what to swap to run it against your own environment.
-
----
-
-## Safety invariants baked into every run
-
-- **Never expose credentials** — passwords/tokens live in a vault, never in a report or `.md`
-- **Never overwrite** existing data without explicit approval — only create new entries
-- **Export only up to yesterday** (Melbourne/AEST) — today's data may be incomplete
-- **Never delete** a processed input until its output is confirmed in the uploaded file
-- **Validate twice** — rebuild locally AND re-download from the NAS after upload
-- **Stop and report** on any ambiguity that would need human approval — don't guess
-
----
-
-## Results in production
-
-- ✅ 60+ unattended daily runs per agent, across two agents
-- ✅ Self-healing dependencies (the runtime VM's filesystem resets between runs; each run re-installs its own packages)
-- ✅ Detects and tracks recurring anomalies (corrupted CSVs from an external port scanner) across 41 consecutive runs without crashing
-- ✅ Month-end consolidation runs on schedule with cross-month catch-up
-- ✅ Every run emits a structured markdown report
-
----
-
-## Tech stack
-
-`Python` · `xlsxwriter` · `pysmb` (SMB upload) · `requests` (Synology REST API) · `holidays` (deterministic business-day logic) · Docker (SMDR receiver) · markdown-driven agent runtime
-
----
-
-## License
-
-MIT — the architecture and patterns here are free to adapt. The reference implementations are sanitized excerpts from production work.
+The public code and documentation remain under the [MIT license](LICENSE). This project complements my [Wellness Village event platform](https://github.com/jackyngtf/wellness-village-event-platform): one covers public-facing delivery; this one covers operational reporting and recovery.

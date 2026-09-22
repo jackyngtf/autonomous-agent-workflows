@@ -4,3 +4,12 @@ __pycache__/
 *.pkl
 .venv/
 *_demo.xlsx
+/output/
+/.playwright-cli/
+/.pytest_cache/
+state/
+_tmp/
+_archive/
+.env
+.env.*
+!.env.example
