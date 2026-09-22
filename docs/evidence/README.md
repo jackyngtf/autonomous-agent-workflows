@@ -12,7 +12,7 @@ The [eTMS case](../case-study/07-etms-document-handoff.md) combines inspected de
 - [Selected run narratives](selected-run-extracts/README.md): rewritten, sanitized accounts of specific observations.
 - [Report-artifact ledger](run-ledger.csv): all 92 canonical run-report files, with source digests and explicit unknown fields.
 - [Operating-record chapter](../case-study/05-operating-record.md): the results that the inventory supports.
-- [eTMS deployment and run review](etms-deployment-review-2026-09-22.md): source findings, held-run aggregates, metadata checks and undeployed offline follow-up.
+- [eTMS deployment and run review](etms-deployment-review-2026-09-22.md): source findings, held-run aggregates, metadata checks, offline follow-up and verified repair deployment; post-fix Cowork run pending.
 
 ## Evidence labels
 

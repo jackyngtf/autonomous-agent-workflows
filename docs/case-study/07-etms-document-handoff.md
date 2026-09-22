@@ -43,7 +43,7 @@ The Cowork summary described **22 target-missing cases and eight unmatched input
 
 Static review found a dependency in the initial planning sequence: the engine needs local destination files to plan, but the driver downloads destinations from the plan. An isolated reproduction confirmed that this sequence could hold an existing target. A private candidate stages the targets first and then validates; its synthetic test reached `PLANNED`, with PDF metadata mocked and transport blocked. That is not a claim that all 22 real inputs would now pass.
 
-The matching follow-up retains exact-title checking. All eight cases still require review: three for renaming and five for manual review, including one with two candidates. Six integrated candidate tests and six separate matching tests passed. The candidate has not been deployed or rerun on the NAS in this snapshot; the observed result remains 30 held and zero swapped.
+The matching follow-up retains exact-title checking. All eight cases still require review: three for renaming and five for manual review, including one with two candidates. Six integrated candidate tests and six separate matching tests passed. These were pre-deployment checks; the observed 15:27 result remains 30 held and zero swapped.
 
 The outer driver also ignores the first engine subprocess return code and returns zero in shadow. A zero process exit cannot establish that a plan succeeded. The report's `HELD`, `ERROR` and `SWAPPED` states must be read at their own level; the observed run had 30 held items even though its `ERROR` and `PARTIAL` counts were zero.
 
@@ -53,7 +53,7 @@ Two retrieved reports had identical bytes and digest. They are not counted as tw
 
 The [dated deployment and run review](../evidence/etms-deployment-review-2026-09-22.md) records the source hashes, duplicate report digest, aggregates and metadata checks without publishing private document identifiers or locations.
 
-This case now includes deployment inspection, static findings and an actual held shadow report. It still does not demonstrate successful live replacement, rollback, scheduler reliability or an already-deployed repair. A proposed private fix requires separate test, deployment and execution evidence.
+At 16:22:42 +10:00 on 22 September 2026, the tested repair was deployed with verified backups and read-back hashes. Configuration remained shadow. The [deployment follow-up](../evidence/etms-deployment-review-2026-09-22.md#deployment-follow-up-22-september-2026) records the new hashes separately from the original inspected source. The user's post-fix Cowork run is pending; deployment alone does not demonstrate successful planning, live replacement, rollback or scheduler reliability.
 
 The eTMS evidence remains outside both the runnable Avaya/NAS demo and the 92-file reporting ledger.
 

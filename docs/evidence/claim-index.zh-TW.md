@@ -10,7 +10,8 @@
 | ETMS-CONTRACT | **來源檢視／設計規則：**平日 09:30 交接予 engine、由操作負責人控制 live，以及受限制的檔案寫入 | 私人入口指引及 2026 年 9 月 22 日部署快照 | [eTMS 檢視](etms-deployment-review-2026-09-22.zh-TW.md)。已檢查檔案與 shadow 設定；程式在 shadow 仍清理收件區及上傳報告。時區、live／回復結果未驗證。 |
 | ETMS-SHADOW-20260922 | **報告記錄：**手動觸發 shadow 執行，30 HELD、0 PLANNED、0 SWAPPED | 兩份內容相同的已取回報告；摘要值見附日期檢視 | [執行證據](etms-deployment-review-2026-09-22.zh-TW.md#執行報告記錄的結果)。不是排程成功，也不是兩次獨立執行。通知字句不代表已發送。不納入 92 份報告清單。 |
 | ETMS-TARGETS-20260922 | **唯讀中繼資料檢查：**22／22 份引用目標 PDF 存在於遠端；零缺漏、零讀取錯誤 | 按報告引用目的地進行檔案存在檢查 | [程式發現](etms-deployment-review-2026-09-22.zh-TW.md#已檢視原始碼的靜態發現)。報告稱目標缺漏，不代表 NAS 檔案缺失。本機暫存與配對需分別診斷。 |
-| ETMS-OFFLINE-FOLLOWUP | **離線重現：**私人候選修正處理了目標暫存初始化測試案例；driver／engine 與配對檢查分別通過 | 六項整合候選測試及六項配對測試，使用隔離資料 | [離線範圍](etms-deployment-review-2026-09-22.zh-TW.md#離線跟進尚未部署)。PDF 中繼資料及 SMB 使用模擬資料，禁止實際網路連線。八項配對個案仍暫緩。不聲稱 NAS 部署、真實文件規劃成功或 live 重跑。 |
+| ETMS-OFFLINE-FOLLOWUP | **離線重現：**私人候選修正處理了目標暫存初始化測試案例；driver／engine 與配對檢查分別通過 | 六項整合候選測試及六項配對測試，使用隔離資料 | [離線範圍](etms-deployment-review-2026-09-22.zh-TW.md#離線跟進尚未部署)。PDF 中繼資料及 SMB 使用模擬資料，禁止實際網路連線。八項配對個案仍暫緩。這些檢查不代表真實文件規劃成功或已進行 live 重跑。 |
+| ETMS-DEPLOYMENT-20260922 | **已核實部署：**已測試 driver 及 engine 於 16:22:42 +10:00 部署；設定維持 shadow | 獲授權部署紀錄、已核對備份及部署後取回檔案摘要值 | [部署跟進](etms-deployment-review-2026-09-22.zh-TW.md#部署跟進2026-年-9-月-22-日)。部署期間沒有執行操作 engine；修正後的 Cowork 執行仍待使用者觸發。原先 15:27 結果維持不變。 |
 | AVA-20260615 | **報告記錄：**新增 14 筆；八張既有工作表共 182 筆 | `avaya_call_log_report_2026-06-15.md`，59–64 行 | [案例摘要](selected-run-extracts/README.zh-TW.md#ava-20260615)。重建前的內容驗證與上傳後的數量檢查須分開理解。 |
 | NAS-20260625 | **報告記錄：**內容比較在上傳前發現重複標題 | `nas_access_log_report_2026-06-25.md`，56–61 行 | [案例摘要](selected-run-extracts/README.zh-TW.md#nas-20260625)。單次執行內的修正，不能推論失敗率下降。 |
 | NAS-20260803 | **報告記錄：**解析 23.6 秒、寫入 22.8 秒、輸出 313,721 筆 | `nas_access_log_report_2026-08-03.md`，20–25、62 行 | [案例摘要](selected-run-extracts/README.zh-TW.md#nas-20260803)。單次觀察；解析列數包含標題。 |

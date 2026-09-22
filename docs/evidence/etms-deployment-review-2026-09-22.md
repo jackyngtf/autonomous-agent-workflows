@@ -63,14 +63,27 @@ Each report artifact was **13,544 bytes**. Digests identify the reviewed bytes; 
 
 ## Offline follow-up: not deployed
 
+This section records the pre-deployment checks. The later deployment is recorded separately below.
+
 A private candidate was prepared and checked in isolation. It uses first-pass target information to stage destination files before running final validation, and stops on unsafe candidate paths or target-read failures. An isolated case reproduced an existing target being held by the original sequence; the candidate then produced `PLANNED` for that test case. PDF metadata was mocked and SMB was simulated in memory, with real network calls blocked, so this does **not** establish that the 22 real documents are ready to swap.
 
 The matching change extends the recognised document-prefix pattern from one family to two while retaining the exact-title requirement. The eight filename cases still remained held: **three require rename review and five require manual review**, including **one ambiguous case with two candidates**. Recognition alone was not treated as permission to select a target.
 
 **Six integrated driver/engine tests passed**, and **six separate matching tests passed**. These are private candidate checks, not the public reporting demo's test suite and not live eTMS execution. The candidate source is not published. No NAS deployment or post-fix rerun had occurred at this snapshot.
 
+## Deployment follow-up: 22 September 2026
+
+At **16:22:42 +10:00 on 22 September 2026**, the two tested scripts were deployed with the user's authorisation. Both original scripts were backed up and their SHA-256 hashes verified. Staged candidate bytes were verified before deployment; read-back checks then confirmed the deployed files matched the tested candidates:
+
+| Deployed artifact | SHA-256 |
+|---|---|
+| Driver | `5c6b1c57af2d542bea5067f2ac7298c0a029785b2c219d1bd5071c9e53f77b19` |
+| Engine | `bfa41f5ed860df0100fe382d13d4cf890b1781c24319308ab30da66e10037405` |
+
+The configuration hash was unchanged and mode remained **shadow** before and after deployment. A second direct read confirmed both deployed hashes and no leftover staging files. Deployment did not execute the operational engine. The user's post-fix Cowork run remains pending; no new planning or swap result is claimed. The earlier source hashes and **15:27 result of 30 HELD, 0 PLANNED and 0 SWAPPED** remain the historical record.
+
 ## What this record does not establish
 
-No successful live swap, rollback, transactional guarantee, unattended success rate or notification delivery is established. A proposed or privately prepared fix must not be attributed to this deployed snapshot without a separate deployment and execution record. The public offline demo remains limited to Avaya and NAS reporting.
+No successful live swap, rollback, transactional guarantee, unattended success rate or notification delivery is established. Verified deployment does not establish a successful post-fix execution. The public offline demo remains limited to Avaya and NAS reporting.
 
 [Read the case](../case-study/07-etms-document-handoff.md) · [Inspect the task reference](../../examples/etms-doc-swap/README.md) · [Claim index](claim-index.md).

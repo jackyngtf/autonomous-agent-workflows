@@ -4,7 +4,7 @@
 
 原有設定使用 Claude Cowork scheduled tasks：平日 09:00 處理 NAS 存取紀錄，10:00 處理 Avaya 通話紀錄。程序以 `Australia/Melbourne` 計算報表日期。設定了排程，不代表每次預期執行都有啟動或完成。
 
-[eTMS 入口約定](../examples/etms-doc-swap/README.zh-TW.md) 指定第三項工作在平日 09:30 執行，但已檢視檔案未寫明時區。[2026 年 9 月 22 日的唯讀部署檢視](evidence/etms-deployment-review-2026-09-22.zh-TW.md)已確認外置 driver、engine 及設定檔，模式為 shadow。原始碼檢視發現，shadow 仍處理收件區清理及上傳報告，而 driver 回傳零結束碼不一定代表 engine 成功。這項工作不採用下文的工作簿流程。已評估的使用者手動 Cowork 報告記錄 30 HELD、0 SWAPPED，須與排程觸發及尚未部署的離線修正檢查分開。
+[eTMS 入口約定](../examples/etms-doc-swap/README.zh-TW.md) 指定第三項工作在平日 09:30 執行，但已檢視檔案未寫明時區。[2026 年 9 月 22 日的唯讀部署檢視](evidence/etms-deployment-review-2026-09-22.zh-TW.md)已確認外置 driver、engine 及設定檔，模式為 shadow。原始碼檢視發現，shadow 仍處理收件區清理及上傳報告，而 driver 回傳零結束碼不一定代表 engine 成功。這項工作不採用下文的工作簿流程。已評估的使用者手動 Cowork 報告記錄 30 HELD、0 SWAPPED，須與排程觸發、離線修正檢查及其後核實的部署分開。修正後的 Cowork 執行仍待觸發。
 
 部分歷史文件稱之為「Claude Code Cowork」。本作品集區分 Cowork 排程工作階段與後來的原生 Windows 恢復工作。手動 Claude Code 或 shell 工作階段不計作無人值守的排程成功。
 

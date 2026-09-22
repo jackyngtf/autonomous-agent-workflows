@@ -12,7 +12,7 @@
 - [執行案例摘要](selected-run-extracts/README.zh-TW.md)：重新撰寫並去識別化的特定觀察。
 - [報告檔案清單](run-ledger.csv)：92 份主要執行報告、來源摘要值，以及明確標示的未知欄位。
 - [執行紀錄章節](../case-study/05-operating-record.zh-TW.md)：本次盤點能支持的結果。
-- [eTMS 部署與執行檢視](etms-deployment-review-2026-09-22.zh-TW.md)：程式發現、暫緩結果彙總、中繼資料檢查及尚未部署的離線跟進。
+- [eTMS 部署與執行檢視](etms-deployment-review-2026-09-22.zh-TW.md)：程式發現、暫緩結果彙總、中繼資料檢查、離線跟進及已核實的修正部署；修正後 Cowork 執行仍待觸發。
 
 ## 證據分類
 

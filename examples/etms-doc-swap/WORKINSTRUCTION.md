@@ -32,7 +32,7 @@ The agent cannot compensate for a driver failure by manually copying files or ch
 
 The driver does not propagate the first engine subprocess return code and can substitute an empty result when JSON is missing; its shadow branch returns zero. Read report contents and per-item states independently. In the reviewed code, `HELD` represents a precheck stop and `ERROR` a caught processing exception. Neither should be promoted to a completed swap because the outer process exited zero.
 
-The first planning pass also depends on destination files that the driver downloads from the resulting plan. An isolated follow-up reproduced that bootstrap failure and tested a private candidate with mocked PDF metadata and blocked transport. The [deployment review](../../docs/evidence/etms-deployment-review-2026-09-22.md) separates the inspected deployment, held run, 22/22 remote-target check and undeployed candidate results.
+The first planning pass also depends on destination files that the driver downloads from the resulting plan. An isolated follow-up reproduced that bootstrap failure and tested a private candidate with mocked PDF metadata and blocked transport. The [deployment review](../../docs/evidence/etms-deployment-review-2026-09-22.md) separates the inspected deployment, held run, 22/22 remote-target check, offline candidate results and later verified deployment.
 
 ## Reporting contract
 
@@ -49,6 +49,6 @@ These are expected fields, not a fabricated sample run. Private reports may need
 
 ## What would support a stronger claim
 
-Deployment presence, configuration and selected source paths have now been inspected. Controlled execution evidence and failure tests are still needed to assess planning, permitted mutations and recovery. A completed live claim additionally requires an authorised execution record and before/after evidence. The assessed user-triggered Cowork attempt remains a held shadow outcome. Neither it nor the offline candidate checks establish a successful scheduled run, a live swap or deployment of the proposed repair.
+Deployment presence, configuration and selected source paths have now been inspected. Controlled execution evidence and failure tests are still needed to assess planning, permitted mutations and recovery. A completed live claim additionally requires an authorised execution record and before/after evidence. The assessed user-triggered Cowork attempt remains a held shadow outcome. Neither it nor the offline candidate checks establish a successful scheduled run or a live swap. The repair was later deployed with verified hashes and shadow configuration; the post-fix Cowork run remains pending.
 
 Related: [case boundary](README.md) · [entry contract](SKILL.md) · [workflow index](../README.md).
