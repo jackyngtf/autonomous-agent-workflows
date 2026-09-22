@@ -7,6 +7,7 @@
 | 識別碼 | 主張與證據分類 | 私人來源位置 | 公開證據及限制 |
 |---|---|---|---|
 | INV-20260922 | **來源檢視：**47 份 Avaya、45 份 NAS 主要執行報告 | 主要 `reports/` 每月目錄；篩選方式見證據說明 | [清單](run-ledger.csv)。這是檔案數，不是經驗證的執行或無人成功次數。 |
+| ETMS-CONTRACT | **來源檢視／設計規則：**平日 09:30 交接予 engine、由操作負責人控制 shadow／live，以及受限制的檔案寫入 | 私有 `etms-doc-swap/SKILL.md`，1–14、22–34 行 | [eTMS 案例](../case-study/07-etms-document-handoff.zh-TW.md)。只有入口指示；遠端部署、時區、目前模式、成功換版及回復未驗證。已檢視材料中未找到本機 engine、測試或換版報告。 |
 | AVA-20260615 | **報告記錄：**新增 14 筆；八張既有工作表共 182 筆 | `avaya_call_log_report_2026-06-15.md`，59–64 行 | [案例摘要](selected-run-extracts/README.zh-TW.md#ava-20260615)。重建前的內容驗證與上傳後的數量檢查須分開理解。 |
 | NAS-20260625 | **報告記錄：**內容比較在上傳前發現重複標題 | `nas_access_log_report_2026-06-25.md`，56–61 行 | [案例摘要](selected-run-extracts/README.zh-TW.md#nas-20260625)。單次執行內的修正，不能推論失敗率下降。 |
 | NAS-20260803 | **報告記錄：**解析 23.6 秒、寫入 22.8 秒、輸出 313,721 筆 | `nas_access_log_report_2026-08-03.md`，20–25、62 行 | [案例摘要](selected-run-extracts/README.zh-TW.md#nas-20260803)。單次觀察；解析列數包含標題。 |

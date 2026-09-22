@@ -2,16 +2,17 @@
 
 [English](README.md) · [**繁體中文**](README.zh-TW.md)
 
-這些文件以重新編寫的設計參考，解釋兩個報表流程。它們不是直接複製的正式操作手冊，也不能連接 NAS，不包含憑證或部署設定。
+這些文件以重新編寫的設計參考，解釋兩個報表流程及一個 eTMS 文件替換交接流程。它們不是直接複製的正式操作手冊，也不能連接正式系統，不包含憑證或部署設定。
 
-[離線示範](../demo/README.zh-TW.md)才是作品集中可執行的部分。它使用合成輸入及本機檔案，展示檢查、重跑及阻止有問題的更新。示範加強後的檢查，不代表每個歷史程式都實作了相同行為。
+[離線示範](../demo/README.zh-TW.md)才是作品集中可執行的部分。它以合成輸入及本機檔案展示 Avaya 與 NAS 報表的檢查、重跑及阻止有問題的更新。示範加強後的檢查，不代表每個歷史程式都實作了相同行為。eTMS 目前記錄到入口約定層次；其外置 engine 及執行結果未包含在內，也未經本次驗證。
 
 | 流程 | 歷史用途與排程 | 參考文件 |
 |---|---|---|
 | Avaya 通話紀錄 | 將每日 SMDR CSV 整理成月報；平日 10:00 | [入口](avaya-call-log/SKILL.zh-TW.md) · [程序](avaya-call-log/WORKINSTRUCTION.zh-TW.md) · [合成報告](avaya-call-log/sample-report.zh-TW.md) |
 | NAS 存取紀錄 | 將檔案傳輸活動整理成月報；平日 09:00 | [入口](nas-access-log/SKILL.zh-TW.md) · [程序](nas-access-log/WORKINSTRUCTION.zh-TW.md) · [合成報告](nas-access-log/sample-report.zh-TW.md) |
+| eTMS 文件替換 | 排程交接至外置 engine；入口指引指定平日 09:30 | [證據邊界](etms-doc-swap/README.zh-TW.md) · [入口](etms-doc-swap/SKILL.zh-TW.md) · [程序](etms-doc-swap/WORKINSTRUCTION.zh-TW.md) |
 
-程序以 `Australia/Melbourne` 計算日期資格。排程設定、報告檔案與成功的無人值守執行，是不同種類的證據。
+兩個報表程序以 `Australia/Melbourne` 計算日期資格。eTMS 來源沒有指定排程時區。排程設定、報告檔案與成功的無人值守執行，是不同種類的證據。
 
 ## 可以執行的內容
 
@@ -27,7 +28,7 @@ Blocked 情境會刻意回傳結束碼 2。每個流程產生獨立報告及證�
 
 ## 如何閱讀範本
 
-`SKILL.md` 展示入口指引。`WORKINSTRUCTION.md` 描述責任、決策點及部署要求。`sample-report.md` 是虛構敘事範例，不是曾經執行的結果或正式環境證據。程式產生的示範報告屬於另外的產出。
+`SKILL.md` 展示入口指引。`WORKINSTRUCTION.md` 描述責任、決策點及部署要求。Avaya 與 NAS 的 `sample-report.md` 是虛構敘事範例，不是曾經執行的結果或正式環境證據。程式產生的示範報告屬於另外的產出。eTMS 沒有成功報告範例，因為尚未驗證已完成執行。
 
 套用設計前，操作負責人需要訂明實際權限、來源結構、保留政策、發佈及恢復行為。範本刻意不包含真實驗證程式及憑證，也不保證保留任意 Excel 功能，或 NAS API 回傳完整資料。
 

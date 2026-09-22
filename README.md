@@ -2,19 +2,19 @@
 
 **English** · [繁體中文](README.zh-TW.md)
 
-### From daily records to monthly reports, with a check before the next step
+### Scheduled reporting and document updates, with clear operating boundaries
 
-PBX call records and NAS file-transfer activity needed to become monthly Excel reports. I built two scheduled workflows around Python processing, written operating procedures and Claude Cowork sessions. The work included handling incomplete inputs, preserving existing records, diagnosing failed runs and leaving a report someone could review.
+This repository covers three operational jobs: PBX call reporting, NAS access reporting and an eTMS document-update handoff. For the reporting jobs, I built workflows around Python processing, written operating procedures and Claude Cowork sessions. The work included handling incomplete inputs, preserving existing records, diagnosing failed runs and leaving a report someone could review.
 
-This portfolio follows those decisions through three operational incidents. It also includes a runnable reference that demonstrates successful updates, repeat runs and a validation failure using fictional data.
+The reporting case study follows those decisions through three operational incidents, with runnable synthetic examples of successful updates, repeat runs and validation failure. The eTMS case documents a different boundary: a scheduled agent hands file changes to a dedicated engine. Its retained instructions are available for analysis; the private engine and its execution outcomes were not available for verification.
 
 [Try the offline demo](#try-it-locally) · [Read the case study](docs/case-study/01-context-and-role.md) · [Check the evidence](docs/evidence/README.md)
 
-![Two reporting workflows, deterministic processing and verification boundaries](images/workflow-overview.svg)
+![Reporting pipelines and the separate eTMS document-update handoff](images/workflow-overview.svg)
 
 *The diagram describes the operating design. Historical checks varied by run; the public demo has its own explicit, tested scope.*
 
-## Two workflows, one reporting problem
+## Two reporting workflows
 
 | | PBX call logs | NAS access logs |
 |---|---|---|
@@ -26,9 +26,19 @@ This portfolio follows those decisions through three operational incidents. It a
 
 The schedules describe configured routines in the historical record. They are not a claim of continuous operation or current uptime. [Follow both data paths →](docs/case-study/02-two-reporting-workflows.md)
 
+## eTMS: a controlled document-update handoff
+
+The third job's entry instructions specify **weekdays at 09:30**. It checks a document-update inbox and invokes a separate swap driver. The driver is assigned matching, planning, archiving, verification and outcome reporting; the agent is restricted to the engine's plan and must stop on failure or ambiguity.
+
+The contract distinguishes **shadow mode** (plan and verify without production changes) from **live mode** (perform configured file swaps). Only the operator may enable live mode. Database access, training-record changes and ad hoc manual swaps are outside the agent's permitted scope.
+
+This is a **documented scheduling and integration contract**. The available local source is the entry skill; the engine, current mode, scheduler timezone, successful swaps and rollback behaviour have not been verified here. It is separate from the two runnable reporting demos and the 92-report ledger.
+
+[Read the eTMS case](docs/case-study/07-etms-document-handoff.md) · [Inspect the sanitized task contract](examples/etms-doc-swap/README.md)
+
 ## What the agent does, and what the code does
 
-The agent reads the operating procedure, inspects the current state, selects permitted actions and interprets unexpected results. Python handles record parsing, date handling, workbook generation and explicit checks. A scheduled session makes this recurring; the agent's role is the interpretation and exception handling around those operations.
+In the reporting jobs, the agent reads the operating procedure, inspects the current state, selects permitted actions and interprets unexpected results. Python handles record parsing, date handling, workbook generation and explicit checks. The eTMS contract delegates the write sequence to its external driver. A scheduled session makes a job recurring; the agent's role is the interpretation and exception handling within each job's boundaries.
 
 Instructions are separated from searchable incident history. A useful finding can become a revised operating rule, with a record of why it changed. That is the project's **self-improvement loop**: maintaining operational knowledge, with no model training involved.
 
@@ -59,7 +69,7 @@ These are report-derived outcomes, not an independent audit of the live NAS. The
 
 ## Try it locally
 
-Use Python 3.11 or later. Both paths run offline with synthetic fixtures, without a NAS account, Claude session or API key.
+Use Python 3.11 or later. Both reporting paths run offline with synthetic fixtures, without a NAS account, Claude session or API key. The eTMS integration is documented only; its private engine is not included in this command.
 
 ```bash
 python -m pip install -r requirements.txt
@@ -92,6 +102,7 @@ The recording opens a read-only viewer of the generated workbooks and the blocke
 4. [Failures, changes and recovery](docs/case-study/04-incidents-and-recovery.md)
 5. [The operating record and its limits](docs/case-study/05-operating-record.md)
 6. [What I would improve next](docs/case-study/06-lessons-and-limitations.md)
+7. [eTMS: handing document changes to a constrained engine](docs/case-study/07-etms-document-handoff.md)
 
 The [reference instructions](examples/README.md) explain the operational contracts. The [demo](demo/README.md) is the executable public reference. Neither is a ready-to-deploy replacement for the private environment.
 

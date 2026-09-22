@@ -2,19 +2,19 @@
 
 [English](README.md) · **繁體中文**
 
-### 從每日紀錄到每月報表，每一步都有明確的檢查
+### 排程報表與文件換版，明確界定每一步操作
 
-PBX 通話紀錄及 NAS 檔案傳輸活動，需要定期整理成每月 Excel 報表。我以 Python 處理程式、書面操作程序及 Claude Cowork 執行工作階段，建立了兩個排程工作流程。工作內容包括處理不完整輸入、保留既有紀錄、診斷失敗原因，以及留下可供覆核的執行報告。
+本 repo 收錄三項營運工作：PBX 通話報表、NAS 存取報表，以及 eTMS 文件換版交接。兩個報表流程由我以 Python 處理程式、書面操作程序及 Claude Cowork 執行工作階段建立。工作內容包括處理不完整輸入、保留既有紀錄、診斷失敗原因，以及留下可供覆核的執行報告。
 
-這份作品集透過三個實際營運事件，說明背後的設計決定；亦提供可執行的精簡參考版本，以虛構資料展示正常更新、重複執行及驗證失敗。
+報表案例透過三個實際營運事件說明設計決定，並以可執行的合成資料示範正常更新、重複執行及驗證失敗。eTMS 案例則呈現另一種操作邊界：排程 Agent 將檔案修改交給專用 engine。現有資料可供分析的是入口指示；私有 engine 及其執行結果未能在本次檢視中驗證。
 
 [執行離線示範](#在本機執行) · [閱讀案例](docs/case-study/01-context-and-role.zh-TW.md) · [查閱證據](docs/evidence/README.zh-TW.md)
 
-![兩個報表流程、確定性處理程式與驗證邊界](images/workflow-overview.zh-TW.svg)
+![報表流程及獨立的 eTMS 文件換版交接](images/workflow-overview.zh-TW.svg)
 
 *圖中呈現操作設計。歷史執行的檢查深度並不完全相同；公開示範另有明確的測試範圍。*
 
-## 兩個流程，共同的報表需求
+## 兩個報表流程
 
 | | PBX 通話紀錄 | NAS 存取紀錄 |
 |---|---|---|
@@ -26,9 +26,19 @@ PBX 通話紀錄及 NAS 檔案傳輸活動，需要定期整理成每月 Excel �
 
 以上時間是歷史紀錄中的設定，並不代表持續運作至今或目前的可用率。[查看兩條資料路徑 →](docs/case-study/02-two-reporting-workflows.zh-TW.md)
 
+## eTMS：受限制的文件換版交接
+
+第三項工作的入口指示設定為**平日 09:30**：檢查文件更新收件區，然後呼叫獨立的 swap driver。配對、規劃、封存、驗證及結果報告由 driver 負責；Agent 只能依照 engine 的計劃操作，遇到失敗或含糊情況必須停止。
+
+操作約定區分 **shadow 模式**（只規劃及驗證，不修改正式環境）與 **live 模式**（執行設定允許的檔案替換）。只有操作負責人可以啟用 live 模式。資料庫存取、訓練紀錄修改，以及臨時手動換檔，都不在 Agent 的允許範圍內。
+
+這部分屬於**已有文件記載的排程與整合約定**。本機可取得的來源是入口 skill；engine、目前模式、排程時區、成功換版及回復行為均未在這裡驗證。它不包含在兩個可執行報表示範或 92 份報告清單內。
+
+[閱讀 eTMS 案例](docs/case-study/07-etms-document-handoff.zh-TW.md) · [查看經整理的排程約定](examples/etms-doc-swap/README.zh-TW.md)
+
 ## Agent 與程式各自負責甚麼
 
-Agent 讀取操作程序、檢查目前狀態、選擇允許的動作，並解讀異常結果。Python 負責紀錄解析、日期處理、工作簿產生及明確的檢查。排程讓流程定期啟動；Agent 的價值在於處理這些操作前後所需的判斷與例外情況。
+在報表工作中，Agent 讀取操作程序、檢查目前狀態、選擇允許的動作，並解讀異常結果。Python 負責紀錄解析、日期處理、工作簿產生及明確的檢查。eTMS 約定則將寫入程序交給外置 driver。排程讓工作定期啟動；Agent 的角色是在各項工作的邊界內處理判斷與例外情況。
 
 操作指示與可搜尋的事件歷史分開保存。有用的發現可以整理成新的操作規則，並記錄修改原因。本專案的 **self-improvement loop** 指的是這種營運知識維護，並不涉及模型訓練。
 
@@ -59,7 +69,7 @@ Agent 讀取操作程序、檢查目前狀態、選擇允許的動作，並解�
 
 ## 在本機執行
 
-使用 Python 3.11 或以上版本。兩條示範路徑均使用合成資料，離線執行，毋須 NAS 帳戶、Claude 工作階段或 API key。
+使用 Python 3.11 或以上版本。兩條報表示範路徑均使用合成資料，離線執行，毋須 NAS 帳戶、Claude 工作階段或 API key。eTMS 整合只提供文件說明，這個指令不包含其私有 engine。
 
 ```bash
 python -m pip install -r requirements.txt
@@ -92,6 +102,7 @@ python -m demo --workflow all --scenario blocked --output-dir output/blocked
 4. [失敗、修改與恢復](docs/case-study/04-incidents-and-recovery.zh-TW.md)
 5. [操作紀錄及其限制](docs/case-study/05-operating-record.zh-TW.md)
 6. [下一步會改善甚麼](docs/case-study/06-lessons-and-limitations.zh-TW.md)
+7. [eTMS：把文件修改交給受限制的 engine](docs/case-study/07-etms-document-handoff.zh-TW.md)
 
 [參考操作指示](examples/README.zh-TW.md) 說明流程規則；[示範程式](demo/README.zh-TW.md) 則是可執行的公開參考版本。兩者都不應直接取代私有環境中的正式部署。
 

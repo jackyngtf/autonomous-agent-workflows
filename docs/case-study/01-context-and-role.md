@@ -24,6 +24,8 @@ The agent reads the procedure, inspects the situation, invokes deterministic pro
 
 This arrangement was useful while the procedures were evolving and unusual failures needed investigation. Stable processing rules belong in reusable functions and tests. An instruction document alone cannot enforce every safety condition.
 
+The portfolio also documents the [eTMS scheduled handoff](07-etms-document-handoff.md), which assigns file replacements to a separate engine. The retained entry instructions support a discussion of the job's scope and operator-controlled modes; they do not establish engine authorship, deployment or successful executions.
+
 ## What this case study establishes
 
 The available record contains dated reports, failure notes, instruction changes, and recovery helpers. It supports specific examples of successful additions, blocked runs, and changes to validation. It does not establish continuous uptime, a measured labor-saving figure, or fully unattended recovery.

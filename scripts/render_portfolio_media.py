@@ -38,7 +38,7 @@ def save(parts, filename):
 
 def architecture(zh):
     title = '每次更新，都經過明確的檢查' if zh else 'Every update has a boundary.'
-    p = start(title, 'Operating design, not a claim that every historical check was identical.')
+    p = start(title, 'Reporting design and the separate eTMS entry contract; historical checks and external engine behaviour have different evidence scopes.', 930)
     text(p, 48, 48, 'AUTONOMOUS AGENT WORKFLOWS', 14, GREEN, 700)
     text(p, 48, 104, title, 38, INK, 650)
     text(p, 48, 144, '排程啟動工作；Agent 解讀情況；Python 處理及比較資料。' if zh else 'A schedule starts the session. The agent interprets. Python processes and compares.', 20, MUTED)
@@ -65,6 +65,11 @@ def architecture(zh):
     text(p, 636, 519, '不要把資料缺漏或不明來源當作成功。' if zh else 'A gap or unknown source stays visible.', 18)
     text(p, 48, 618, '事件 → 搜尋歷史 → 修改操作指示' if zh else 'Incident → searchable history → revised operating instructions', 22, INK, 600)
     text(p, 48, 658, '操作設計；歷史檢查深度不一。離線 demo 另有測試範圍。' if zh else 'Operating design. Historical checks varied; the offline demo has a separate tested scope.', 17, MUTED)
+    box(p, 48, 700, 1104, 185)
+    text(p, 72, 738, '第三項工作 / eTMS 文件換版交接' if zh else 'THIRD JOB / eTMS document-update handoff', 20, GREEN, 650)
+    text(p, 72, 779, '平日 09:30 → 外置 driver → shadow 規劃 / live 換檔' if zh else 'Weekdays 09:30 → external driver → shadow planning / live file swaps', 22, INK, 600)
+    text(p, 72, 819, '由操作負責人啟用 live；遇到失敗或含糊情況，停止並報告。' if zh else 'The operator enables live mode. Failures or ambiguity require stopping and reporting.', 18)
+    text(p, 72, 858, '已檢視入口約定；engine、時區及執行結果未驗證。' if zh else 'Entry contract inspected; engine, timezone and execution outcomes unverified.', 17, MUTED)
     save(p, 'workflow-overview.zh-TW.svg' if zh else 'workflow-overview.svg')
 
 

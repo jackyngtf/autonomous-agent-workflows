@@ -4,6 +4,8 @@
 
 The original setup used Claude Cowork scheduled tasks: NAS access logs at 09:00 and Avaya call logs at 10:00 on weekdays. The procedure uses `Australia/Melbourne` for report dates. Configured schedules do not prove that every expected attempt started or completed.
 
+The [eTMS entry contract](../examples/etms-doc-swap/README.md) specifies a third weekday task at 09:30, with no timezone stated in the inspected file. That task calls a separately deployed document-swap driver; it does not follow the workbook-generation sequence below. Its current configuration and execution history were not available for inspection.
+
 Some historical files called this “Claude Code Cowork.” This portfolio distinguishes Cowork scheduled sessions from later native Windows recovery work. A manual Claude Code or shell session is not counted as an unattended scheduled success.
 
 ## The recorded configuration

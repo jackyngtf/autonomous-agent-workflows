@@ -2,7 +2,9 @@
 
 [**English**](architecture.md) · [繁體中文](architecture.zh-TW.md)
 
-The two workflows combine a scheduled agent session, written operating procedures and Python processing. Their task is to add missing completed dates to monthly reports while preserving existing tabular records. The agent coordinates the work and handles exceptions; the scheduler starts the session.
+The two reporting workflows combine a scheduled agent session, written operating procedures and Python processing. Their task is to add missing completed dates to monthly reports while preserving existing tabular records. The agent coordinates the work and handles exceptions; the scheduler starts the session.
+
+The third job, [eTMS document updates](case-study/07-etms-document-handoff.md), has a different contract: the agent invokes an external driver, which owns the file-change plan and execution. Its private engine was not available for verification. The workbook pipeline below applies to the reporting jobs.
 
 This describes the project's design. Historical scripts have different validation depths. The [offline demo](../demo/README.md) is a separate, strengthened local simulation, not evidence that every production run passed the same checks.
 

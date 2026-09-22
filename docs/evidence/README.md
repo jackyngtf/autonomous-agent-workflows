@@ -4,6 +4,8 @@
 
 This directory separates historical reports from design rules and from behavior a reviewer can reproduce locally. The inventory date is **September 22, 2026**. No live production connection was made for this portfolio review.
 
+The [eTMS case](../case-study/07-etms-document-handoff.md) has a different evidence level: its entry instructions were inspected, but its private engine, configuration and operating outcomes were unavailable. It contributes no rows to the reporting ledger and no verified swap-count or rollback claim.
+
 ## Start here
 
 - [Claim index](claim-index.md): the source and limitation behind each principal claim.

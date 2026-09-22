@@ -4,6 +4,8 @@
 
 原有設定使用 Claude Cowork scheduled tasks：平日 09:00 處理 NAS 存取紀錄，10:00 處理 Avaya 通話紀錄。程序以 `Australia/Melbourne` 計算報表日期。設定了排程，不代表每次預期執行都有啟動或完成。
 
+[eTMS 入口約定](../examples/etms-doc-swap/README.zh-TW.md) 指定第三項工作在平日 09:30 執行，但已檢視檔案未寫明時區。該工作呼叫獨立部署的文件替換 driver，並不採用下文的工作簿產生流程；本次未取得它的目前設定及執行歷史。
+
 部分歷史文件稱之為「Claude Code Cowork」。本作品集區分 Cowork 排程工作階段與後來的原生 Windows 恢復工作。手動 Claude Code 或 shell 工作階段不計作無人值守的排程成功。
 
 ## 紀錄中的設定
