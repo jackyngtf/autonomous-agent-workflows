@@ -1,50 +1,60 @@
-# 07 · eTMS: a constrained document-update handoff
+# 07 · eTMS: a held update exposes the handoff boundary
 
 **English** · [繁體中文](07-etms-document-handoff.zh-TW.md) · [Project overview](../../README.md)
 
-The eTMS job extends the portfolio from recurring reports to document maintenance. Its entry instructions describe a weekday 09:30 task: inspect a drop-folder inbox and run a separately deployed engine to plan or perform document version swaps. The scheduler timezone is not specified in the inspected entry file.
+The eTMS job extends the portfolio from recurring reports to document maintenance. Its entry instructions describe a weekday 09:30 task that hands document updates to a separately deployed engine. The source does not specify the scheduler timezone, and the inspected materials do not establish engine authorship.
 
-The available evidence is the task contract. No engine, driver, configuration, tests or swap reports were found in the inspected local task materials. That does not establish whether an engine is deployed remotely. This chapter explains the documented responsibilities without claiming a verified production outcome.
+On 22 September 2026, read-only inspection confirmed the driver, engine and a shadow configuration. A user then manually triggered the Cowork task. The resulting report recorded **30 HELD, 0 PLANNED and 0 SWAPPED** against 30 inputs and a 509-entry manifest. This is a useful operational result because it exposes where processing stopped; it is not a successful document update.
 
 ## Delegate the write sequence
 
-The scheduled agent is told to obtain `swap_engine.py`, `run_swap.py` and their configuration from the deployment location. If those artifacts are unavailable, it must report `ENGINE NOT DEPLOYED` and stop. When available, it invokes the driver and reads the resulting JSON and report.
+The intended design assigns matching, prechecks, replacement, archiving, verification and reporting to the driver and engine. The agent obtains the deployed package, respects its mode, invokes the driver and explains its result. If the package is absent, it must stop rather than substitute ad hoc file operations.
 
 ```mermaid
 flowchart LR
-  S[Weekday scheduled session] --> A{Engine and configuration available?}
-  A -->|no| N[Report missing deployment and stop]
-  A -->|yes| D[Invoke configured driver]
-  D --> M{Configured mode}
-  M -->|shadow| P[Plan and verify only]
-  M -->|live| W[Engine-controlled file swaps]
-  P --> R[Read result and report]
-  W --> R
-  D -->|failure or ambiguity| F[Stop and report; no manual substitute]
+  A[Configured driver] --> H[Inbox housekeeping]
+  H --> P[Engine planning and checks]
+  P --> M{Configured mode}
+  M -->|shadow| R[Upload report; skip document swaps]
+  M -->|live| W[Configured engine replacement]
+  R --> I[Inspect item states and report]
+  W --> I
+  I --> F[Explain held items and failures]
 ```
 
-The contract assigns inbox retrieval, manifest-based matching, prechecks, file swaps, archival, verification, logging and rollback to the driver. It mentions a manifest derived from an existing SQL snapshot file; that is distinct from authorizing a database connection. The engine implementation and these mechanisms were not inspected or exercised here.
+This diagram reflects the inspected source structure. In particular, inbox housekeeping occurs before the mode branch, and shadow uploads reports. Shadow skips production-document swaps; it does **not** mean no remote writes.
 
-## Permission is narrower than file-system access
+The manifest is derived from a static SQL snapshot file. That is a file input, not authority to connect to a database or execute SQL.
 
-| Boundary in the entry contract | Practical implication |
+## The intended authority boundary
+
+| Contract rule | Responsibility |
 |---|---|
-| No database access or SQL execution | The task does not update application records through a database client. |
-| No training, progress, completion, assignment or quiz changes | Document replacement does not decide whether users require retraining. |
-| Writes only through the engine's swap plan | Planned files, version archives and designated logs/reports are the permitted output classes. |
-| Operator controls shadow-to-live transition | The agent cannot enable its own production-write mode. |
-| Stop on failure or ambiguity | No ad hoc swap, unreported retry of a failed live write or attempted database repair. |
+| No database or training-record changes | Document replacement does not update version fields, progress, completion, assignments or quizzes. |
+| Engine-controlled file operations | The agent does not improvise swaps or repair database references. |
+| Operator controls live mode | The agent cannot enable its own production-write mode. |
+| Stop and report ambiguity or failure | A failed live write is not silently retried; a driver crash is reported with its known state. |
 
-These are written constraints. They require enforcement in engine code and service permissions before they can be treated as technical guarantees.
+These are instruction-level rules. The deployment review evaluates code separately; it does not turn every written constraint into a technical guarantee.
 
-## Shadow and live mean different outcomes
+## What the held run revealed
 
-Shadow mode is specified as planning and verification without production writes. Live mode permits configured swaps through the driver. The entry file says shadow remains the mode until IT changes it; the actual current configuration was not available, so the portfolio does not assert a current mode.
+The Cowork summary described **22 target-missing cases and eight unmatched inputs**. Read-only checking then found **all 22 referenced target PDFs present on the NAS**, with no missing targets or read errors. A “missing target” message in this run therefore does not prove a missing production file or broken database reference.
 
-The agent's report must distinguish `PLANNED`, `SWAPPED` and `HELD`, explain held items, flag path or engine anomalies, and identify changed files and archived versions after a live operation. A driver crash requires a report of the last reached state, not a manual attempt to finish the swap.
+Static review found a dependency in the initial planning sequence: the engine needs local destination files to plan, but the driver downloads destinations from the plan. An isolated reproduction confirmed that this sequence could hold an existing target. A private candidate stages the targets first and then validates; its synthetic test reached `PLANNED`, with PDF metadata mocked and transport blocked. That is not a claim that all 22 real inputs would now pass.
 
-## What would establish an implementation result
+The matching follow-up retains exact-title checking. All eight cases still require review: three for renaming and five for manual review, including one with two candidates. Six integrated candidate tests and six separate matching tests passed. The candidate has not been deployed or rerun on the NAS in this snapshot; the observed result remains 30 held and zero swapped.
 
-Useful additional evidence would include a sanitized engine interface, a reviewed configuration schema, synthetic matching/ambiguity tests, injected-failure rollback tests, and dated shadow/live reports. Until that evidence is available, this remains a documented scheduled integration contract, separate from the runnable Avaya/NAS reference and the report-artifact ledger.
+The outer driver also ignores the first engine subprocess return code and returns zero in shadow. A zero process exit cannot establish that a plan succeeded. The report's `HELD`, `ERROR` and `SWAPPED` states must be read at their own level; the observed run had 30 held items even though its `ERROR` and `PARTIAL` counts were zero.
+
+Two retrieved reports had identical bytes and digest. They are not counted as two independent successful runs. Any “IT notified” text is retained only as report wording; separate notification dispatch was not verified.
+
+## Evidence and remaining limits
+
+The [dated deployment and run review](../evidence/etms-deployment-review-2026-09-22.md) records the source hashes, duplicate report digest, aggregates and metadata checks without publishing private document identifiers or locations.
+
+This case now includes deployment inspection, static findings and an actual held shadow report. It still does not demonstrate successful live replacement, rollback, scheduler reliability or an already-deployed repair. A proposed private fix requires separate test, deployment and execution evidence.
+
+The eTMS evidence remains outside both the runnable Avaya/NAS demo and the 92-file reporting ledger.
 
 [Task reference](../../examples/etms-doc-swap/README.md) · [Evidence guide](../evidence/README.md) · [Previous: lessons and limitations](06-lessons-and-limitations.md)

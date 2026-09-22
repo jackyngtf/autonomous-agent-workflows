@@ -4,7 +4,7 @@
 
 These documents explain two reporting workflows and an eTMS document-replacement handoff through rewritten design references. They are not copied production runbooks and cannot connect to live systems. They contain no credentials or deployment configuration.
 
-The [offline demo](../demo/README.md) is the runnable part of the portfolio. It covers Avaya and NAS reporting with synthetic inputs and local files to demonstrate checks, repeat runs and blocked updates. Its strengthened checks do not establish that every historical script implemented the same behaviour. eTMS is documented at the entry-contract level; its external engine and execution results are not included or verified here.
+The [offline demo](../demo/README.md) is the runnable part of the portfolio. It covers Avaya and NAS reporting with synthetic inputs and local files to demonstrate checks, repeat runs and blocked updates. Its strengthened checks do not establish that every historical script implemented the same behaviour. For eTMS, a [22 September 2026 deployment review](../docs/evidence/etms-deployment-review-2026-09-22.md) inspected the private driver, engine and shadow configuration without executing them. The review distinguishes the intended contract from source-level gaps. A separately assessed, user-triggered shadow report records 30 held inputs and no planned or swapped items; offline follow-up is documented as an undeployed candidate.
 
 | Workflow | Historical purpose and schedule | Reference documents |
 |---|---|---|
@@ -28,7 +28,7 @@ The blocked scenario intentionally returns exit code 2. Each workflow writes its
 
 ## How to read the templates
 
-`SKILL.md` illustrates the entry instructions. `WORKINSTRUCTION.md` describes responsibilities, decision points and deployment requirements. The Avaya and NAS `sample-report.md` files are fictional narrative examples, not executed runs or production evidence records. Generated demo reports are separate artifacts. eTMS has no sample success report because no completed execution was verified.
+`SKILL.md` illustrates the entry instructions. `WORKINSTRUCTION.md` describes responsibilities, decision points and deployment requirements. The Avaya and NAS `sample-report.md` files are fictional narrative examples, not executed runs or production evidence records. Generated demo reports are separate artifacts. eTMS documents inspected deployment code and its limitations, without inventing a successful run: shadow skips production-document swaps but still performs inbox housekeeping and report uploads, and a zero driver exit does not establish engine success.
 
 Before adapting the design, an operator must define actual permissions, source schemas, retention, publication and recovery behaviour. The templates intentionally omit live authentication snippets and credentials. They do not guarantee arbitrary Excel feature preservation or complete NAS API results.
 

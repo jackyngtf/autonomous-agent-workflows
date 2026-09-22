@@ -6,7 +6,7 @@
 
 This repository covers three operational jobs: PBX call reporting, NAS access reporting and an eTMS document-update handoff. For the reporting jobs, I built workflows around Python processing, written operating procedures and Claude Cowork sessions. The work included handling incomplete inputs, preserving existing records, diagnosing failed runs and leaving a report someone could review.
 
-The reporting case study follows those decisions through three operational incidents, with runnable synthetic examples of successful updates, repeat runs and validation failure. The eTMS case documents a different boundary: a scheduled agent hands file changes to a dedicated engine. Its retained instructions are available for analysis; the private engine and its execution outcomes were not available for verification.
+The reporting case study follows those decisions through three operational incidents, with runnable synthetic examples of successful updates, repeat runs and validation failure. The eTMS case adds a different boundary: a scheduled agent hands file changes to a dedicated engine. A deployment review and a manually triggered shadow run show why the configuration, process exit and per-document result need separate checks.
 
 [Try the offline demo](#try-it-locally) · [Read the case study](docs/case-study/01-context-and-role.md) · [Check the evidence](docs/evidence/README.md)
 
@@ -30,11 +30,11 @@ The schedules describe configured routines in the historical record. They are no
 
 The third job's entry instructions specify **weekdays at 09:30**. It checks a document-update inbox and invokes a separate swap driver. The driver is assigned matching, planning, archiving, verification and outcome reporting; the agent is restricted to the engine's plan and must stop on failure or ambiguity.
 
-The contract distinguishes **shadow mode** (plan and verify without production changes) from **live mode** (perform configured file swaps). Only the operator may enable live mode. Database access, training-record changes and ad hoc manual swaps are outside the agent's permitted scope.
+The inspected configuration on **22 September 2026** was **shadow**. Source review confirmed that shadow skips production-document swaps but still performs inbox housekeeping and report uploads. Only the operator may enable live mode; database access, training-record changes and ad hoc manual swaps remain outside the agent's intended scope.
 
-This is a **documented scheduling and integration contract**. The available local source is the entry skill; the engine, current mode, scheduler timezone, successful swaps and rollback behaviour have not been verified here. It is separate from the two runnable reporting demos and the 92-report ledger.
+A user-triggered Cowork run reported **30 HELD, 0 PLANNED and 0 SWAPPED**. All 22 targets associated with missing-target messages were then found on the NAS through read-only checks. An offline reproduction supported the local-staging diagnosis; a private candidate passed isolated checks but is not deployed in this snapshot. Eight matching cases still require review. This is a held shadow result, not a successful live update. Scheduler timezone, successful live swaps and rollback remain unverified. The evidence is separate from the two runnable reporting demos and the 92-report ledger.
 
-[Read the eTMS case](docs/case-study/07-etms-document-handoff.md) · [Inspect the sanitized task contract](examples/etms-doc-swap/README.md)
+[Read the eTMS case](docs/case-study/07-etms-document-handoff.md) · [Check the deployment and run evidence](docs/evidence/etms-deployment-review-2026-09-22.md) · [Inspect the task contract](examples/etms-doc-swap/README.md)
 
 ## What the agent does, and what the code does
 

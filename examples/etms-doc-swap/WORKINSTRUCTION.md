@@ -2,7 +2,7 @@
 
 [**English**](WORKINSTRUCTION.md) · [繁體中文](WORKINSTRUCTION.zh-TW.md)
 
-This reference reconstructs the handoff described by the available entry skill. The deployed engine and driver are outside the public repository. No engine source, tests or run reports have been inspected as evidence for this case, so the steps below are requirements, not observed execution results.
+This reference distinguishes the intended handoff from the **22 September 2026** deployment/source inspection. That read-only review confirmed driver, engine and configuration files and a captured mode of **shadow**, without executing the operational code. A separately assessed user-triggered shadow report recorded 30 HELD, 0 PLANNED and 0 SWAPPED. The private implementation remains outside the public repository; the procedure below is not a claim that all its requirements are enforced.
 
 ## Inputs and deployment boundary
 
@@ -22,11 +22,17 @@ The instructions specify weekday 09:30 execution, without a timezone. The deploy
 
 ## Modes and permitted changes
 
-**Shadow:** the contract requires planning and verification only, with zero production writes. It is the instructed mode until the operator changes configuration. The available entry file does not establish the current deployed mode.
+**Shadow:** the captured configuration selects this mode. The entry contract describes planning and verification without production changes. The inspected source skips production-document swaps, but the driver performs hidden/temporary/metadata inbox cleanup before the mode branch and uploads reports in shadow. The mode therefore does not guarantee zero remote mutation. These are source-level behaviours, not a claim that specific entries were deleted in an observed run.
 
-**Live:** the driver may perform only the file replacements in the engine's plan and the associated archive, log and report writes authorised by the contract. The engine owns replacement and required rollback behaviour. No atomicity, rollback reliability or successful live outcome has been verified here.
+**Live:** the intended contract permits only the file replacements in the engine's plan and associated authorised archive, log and report writes. The engine owns replacement and required rollback behaviour. Static source inspection does not establish atomicity, rollback reliability or a successful live outcome.
 
 The agent cannot compensate for a driver failure by manually copying files or changing database references. Database version fields, training records, progress, completions, assignments, quizzes, application code and container configuration remain outside scope. A document-file replacement must not be described as updating any of those records.
+
+## Source findings that affect interpretation
+
+The driver does not propagate the first engine subprocess return code and can substitute an empty result when JSON is missing; its shadow branch returns zero. Read report contents and per-item states independently. In the reviewed code, `HELD` represents a precheck stop and `ERROR` a caught processing exception. Neither should be promoted to a completed swap because the outer process exited zero.
+
+The first planning pass also depends on destination files that the driver downloads from the resulting plan. An isolated follow-up reproduced that bootstrap failure and tested a private candidate with mocked PDF metadata and blocked transport. The [deployment review](../../docs/evidence/etms-deployment-review-2026-09-22.md) separates the inspected deployment, held run, 22/22 remote-target check and undeployed candidate results.
 
 ## Reporting contract
 
@@ -43,6 +49,6 @@ These are expected fields, not a fabricated sample run. Private reports may need
 
 ## What would support a stronger claim
 
-Engine inspection, configuration evidence, controlled shadow output and failure tests would be needed to verify planning, file constraints and rollback. A completed live claim would additionally require an authorised execution record and before/after evidence. Until then, this case demonstrates a constrained scheduled handoff design.
+Deployment presence, configuration and selected source paths have now been inspected. Controlled execution evidence and failure tests are still needed to assess planning, permitted mutations and recovery. A completed live claim additionally requires an authorised execution record and before/after evidence. The assessed user-triggered Cowork attempt remains a held shadow outcome. Neither it nor the offline candidate checks establish a successful scheduled run, a live swap or deployment of the proposed repair.
 
 Related: [case boundary](README.md) · [entry contract](SKILL.md) · [workflow index](../README.md).

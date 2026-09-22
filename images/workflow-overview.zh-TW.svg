@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="930" viewBox="0 0 1200 930" role="img" aria-labelledby="title desc">
-<title id="title">每次更新，都經過明確的檢查</title><desc id="desc">Reporting design and the separate eTMS entry contract; historical checks and external engine behaviour have different evidence scopes.</desc>
+<title id="title">每次更新，都經過明確的檢查</title><desc id="desc">Reporting design and the eTMS source review with a manually triggered shadow report: 30 held, zero swapped. No live replacement or rollback result is established.</desc>
 <style>text{font-family:Inter,Segoe UI,Microsoft JhengHei,Noto Sans CJK TC,sans-serif} .mono{font-family:Consolas,monospace}</style>
 <rect width="1200" height="930" fill="#f5f6f0"/>
 <text x="48" y="48" font-size="14" fill="#16735a" font-weight="700" class="">AUTONOMOUS AGENT WORKFLOWS</text>
@@ -41,7 +41,7 @@
 <text x="48" y="658" font-size="17" fill="#586760" font-weight="400" class="">操作設計；歷史檢查深度不一。離線 demo 另有測試範圍。</text>
 <rect x="48" y="700" width="1104" height="185" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
 <text x="72" y="738" font-size="20" fill="#16735a" font-weight="650" class="">第三項工作 / eTMS 文件換版交接</text>
-<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">平日 09:30 → 外置 driver → shadow 規劃 / live 換檔</text>
-<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">由操作負責人啟用 live；遇到失敗或含糊情況，停止並報告。</text>
-<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">已檢視入口約定；engine、時區及執行結果未驗證。</text>
+<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">外置 driver · 手動 shadow 報告：30 HELD / 0 SWAPPED</text>
+<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">原定平日 09:30；2026-09-22 檢視部署與手動執行報告。</text>
+<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">Shadow 仍有收件區／報告寫入；live 換檔與回復未驗證。</text>
 </svg>

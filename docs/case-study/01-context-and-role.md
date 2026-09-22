@@ -24,7 +24,7 @@ The agent reads the procedure, inspects the situation, invokes deterministic pro
 
 This arrangement was useful while the procedures were evolving and unusual failures needed investigation. Stable processing rules belong in reusable functions and tests. An instruction document alone cannot enforce every safety condition.
 
-The portfolio also documents the [eTMS scheduled handoff](07-etms-document-handoff.md), which assigns file replacements to a separate engine. The retained entry instructions support a discussion of the job's scope and operator-controlled modes; they do not establish engine authorship, deployment or successful executions.
+The portfolio also documents the [eTMS scheduled handoff](07-etms-document-handoff.md), which assigns file replacements to a separate engine. Its entry instructions establish the intended scope and operator-controlled modes. A [read-only review on 22 September 2026](../evidence/etms-deployment-review-2026-09-22.md) confirmed deployed files and a shadow configuration, and inspected source-level limitations without executing the operational code. A separately assessed manual shadow report records 30 held items and no swaps. Neither these records nor the undeployed offline candidate checks establish engine authorship or a successful live replacement.
 
 ## What this case study establishes
 

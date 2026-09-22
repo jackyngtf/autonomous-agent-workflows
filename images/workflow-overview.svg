@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="930" viewBox="0 0 1200 930" role="img" aria-labelledby="title desc">
-<title id="title">Every update has a boundary.</title><desc id="desc">Reporting design and the separate eTMS entry contract; historical checks and external engine behaviour have different evidence scopes.</desc>
+<title id="title">Every update has a boundary.</title><desc id="desc">Reporting design and the eTMS source review with a manually triggered shadow report: 30 held, zero swapped. No live replacement or rollback result is established.</desc>
 <style>text{font-family:Inter,Segoe UI,Microsoft JhengHei,Noto Sans CJK TC,sans-serif} .mono{font-family:Consolas,monospace}</style>
 <rect width="1200" height="930" fill="#f5f6f0"/>
 <text x="48" y="48" font-size="14" fill="#16735a" font-weight="700" class="">AUTONOMOUS AGENT WORKFLOWS</text>
@@ -41,7 +41,7 @@
 <text x="48" y="658" font-size="17" fill="#586760" font-weight="400" class="">Operating design. Historical checks varied; the offline demo has a separate tested scope.</text>
 <rect x="48" y="700" width="1104" height="185" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
 <text x="72" y="738" font-size="20" fill="#16735a" font-weight="650" class="">THIRD JOB / eTMS document-update handoff</text>
-<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">Weekdays 09:30 → external driver → shadow planning / live file swaps</text>
-<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">The operator enables live mode. Failures or ambiguity require stopping and reporting.</text>
-<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">Entry contract inspected; engine, timezone and execution outcomes unverified.</text>
+<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">External driver · manual shadow report: 30 HELD / 0 SWAPPED</text>
+<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">Weekday 09:30 contract; deployment and manual-run evidence reviewed 22 Sep 2026.</text>
+<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">Shadow still writes inbox/report data. Live swaps and rollback remain unverified.</text>
 </svg>

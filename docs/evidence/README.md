@@ -2,9 +2,9 @@
 
 [English](README.md) · [繁體中文](README.zh-TW.md) · [Project overview](../../README.md)
 
-This directory separates historical reports from design rules and from behavior a reviewer can reproduce locally. The inventory date is **September 22, 2026**. No live production connection was made for this portfolio review.
+This directory separates historical reports from design rules and from behavior a reviewer can reproduce locally. The Avaya/NAS inventory date is **September 22, 2026**; those historical integrations were not rerun to refresh the ledger. A separate eTMS review used authorised read-only deployment/report inspection and assessed a user-triggered Cowork shadow run.
 
-The [eTMS case](../case-study/07-etms-document-handoff.md) has a different evidence level: its entry instructions were inspected, but its private engine, configuration and operating outcomes were unavailable. It contributes no rows to the reporting ledger and no verified swap-count or rollback claim.
+The [eTMS case](../case-study/07-etms-document-handoff.md) combines inspected deployment/source snapshots, a manual shadow report with **30 HELD and 0 SWAPPED**, and read-only confirmation that all 22 targets associated with missing-target messages existed remotely. Offline candidate-fix checks are labelled separately from the inspected deployment. It contributes no rows to the reporting ledger and establishes no successful live swap or rollback.
 
 ## Start here
 
@@ -12,13 +12,14 @@ The [eTMS case](../case-study/07-etms-document-handoff.md) has a different evide
 - [Selected run narratives](selected-run-extracts/README.md): rewritten, sanitized accounts of specific observations.
 - [Report-artifact ledger](run-ledger.csv): all 92 canonical run-report files, with source digests and explicit unknown fields.
 - [Operating-record chapter](../case-study/05-operating-record.md): the results that the inventory supports.
+- [eTMS deployment and run review](etms-deployment-review-2026-09-22.md): source findings, held-run aggregates, metadata checks and undeployed offline follow-up.
 
 ## Evidence labels
 
 | Label | Meaning |
 |---|---|
 | Design rule | An intended boundary expressed in instructions; enforcement must be assessed separately. |
-| Reported outcome | A dated report says this happened. The private integration was not rerun for this review. |
+| Reported outcome | A dated report says this happened. Identify its trigger and separate report contents from independently checked effects. |
 | Source inspection | The behavior is visible in inspected code or documents. It need not have been exercised. |
 | Reproduced offline | A local synthetic demonstration or test; it does not establish production behavior. |
 | Proposed | A future improvement, not a present capability claim. |

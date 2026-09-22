@@ -4,7 +4,7 @@
 
 The two reporting workflows combine a scheduled agent session, written operating procedures and Python processing. Their task is to add missing completed dates to monthly reports while preserving existing tabular records. The agent coordinates the work and handles exceptions; the scheduler starts the session.
 
-The third job, [eTMS document updates](case-study/07-etms-document-handoff.md), has a different contract: the agent invokes an external driver, which owns the file-change plan and execution. Its private engine was not available for verification. The workbook pipeline below applies to the reporting jobs.
+The third job, [eTMS document updates](case-study/07-etms-document-handoff.md), delegates file planning and execution to an external driver. A [read-only deployment review on 22 September 2026](evidence/etms-deployment-review-2026-09-22.md) inspected the driver, engine and shadow configuration. The source skips production-document swaps in shadow but still performs inbox housekeeping and report uploads; a zero driver exit does not establish engine success. A separately assessed manual shadow report recorded 30 HELD and 0 SWAPPED; an undeployed private candidate was checked offline. The workbook pipeline below applies only to the reporting jobs.
 
 This describes the project's design. Historical scripts have different validation depths. The [offline demo](../demo/README.md) is a separate, strengthened local simulation, not evidence that every production run passed the same checks.
 

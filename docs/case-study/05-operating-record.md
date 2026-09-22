@@ -29,6 +29,6 @@ Each row links through the [claim index](../evidence/claim-index.md) to a saniti
 
 Some destination workbooks were updated by sessions or actors absent from the local report history. Scheduler logs and complete intervention records were not part of this inventory. Most ledger entries are intentionally inventory-only, with execution mode and outcome marked unknown until individually assessed.
 
-The record therefore cannot support an uptime percentage, success rate, “60+ unattended runs per agent,” hours saved, or continuous operation through the inventory date. No production connection was made to refresh those historical observations during portfolio preparation.
+The record therefore cannot support an uptime percentage, success rate, “60+ unattended runs per agent,” hours saved, or continuous operation through the inventory date. The Avaya/NAS integrations were not rerun to refresh these historical observations. The separate [eTMS review](../evidence/etms-deployment-review-2026-09-22.md) records its own read-only inspection and manually triggered shadow outcome outside this ledger.
 
 [Previous](04-incidents-and-recovery.md) · [Next: lessons and limitations](06-lessons-and-limitations.md)
