@@ -8,6 +8,7 @@ from unittest.mock import patch
 from demo.__main__ import FIXTURES
 from demo.workflows import run_demo
 from scripts import render_portfolio_media as media
+from scripts.render_demo_walkthrough import load_workflow
 from test_workflows import NOW
 
 
@@ -47,3 +48,17 @@ class MediaEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, 'content rejection and retention'):
             self.render()
         self.assertFalse((self.root / 'images/demo-preview.svg').exists())
+
+    def test_walkthrough_reads_generated_values(self):
+        result = load_workflow(self.root, 'avaya')
+        self.assertEqual([sheet['row_count'] for sheet in result['sheets']], [1, 13])
+        self.assertEqual(result['sheets'][1]['rows'][0][0], '2026-08-04 09:00:00')
+        run_demo('avaya', FIXTURES['avaya'], self.root / 'output/demo/avaya', NOW)
+        repeat = load_workflow(self.root, 'avaya')
+        self.assertEqual(repeat['evidence']['demo']['status'], 'NO_CHANGE')
+
+    def test_walkthrough_rejects_changed_artifact(self):
+        path = self.root / 'output/blocked/avaya/2026-08.xlsx'
+        path.write_bytes(path.read_bytes() + b'changed since evidence capture')
+        with self.assertRaisesRegex(ValueError, 'changed since evidence capture'):
+            load_workflow(self.root, 'avaya')

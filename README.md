@@ -80,7 +80,9 @@ python -m demo --workflow all --scenario blocked --output-dir output/blocked
 
 ![Synthetic workbook output and a blocked candidate, generated from the offline demo](images/demo-preview.svg)
 
-[Walk through the demo and checks →](demo/README.md)
+[Watch the synthetic walkthrough](images/demo-walkthrough.webm?raw=true) · [Run the demo and checks](demo/README.md)
+
+The recording opens a read-only viewer of the generated workbooks and the blocked-run evidence, with English and Traditional Chinese labels. It is an artifact walkthrough, not a recording of a live production agent.
 
 ## Read the case study
 
@@ -97,4 +99,4 @@ The [reference instructions](examples/README.md) explain the operational contrac
 
 The repository contains authored case studies, sanitized source summaries, synthetic inputs and local demonstration code. It excludes production credentials, session state, raw company records and live integration adapters. Historical screenshots illustrate task configuration; they do not establish present-day scheduler health. [Media notes](images/README.md) · [Security and data boundaries](SECURITY.md)
 
-The public code and documentation remain under the [MIT license](LICENSE). This project complements my [Wellness Village event platform](https://github.com/jackyngtf/wellness-village-event-platform): one covers public-facing delivery; this one covers operational reporting and recovery.
+The public code and documentation remain under the [MIT license](LICENSE).

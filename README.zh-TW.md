@@ -80,7 +80,9 @@ python -m demo --workflow all --scenario blocked --output-dir output/blocked
 
 ![由離線示範產生的合成工作簿輸出及被攔截的待發布檔案](images/demo-preview.zh-TW.svg)
 
-[逐步查看示範與驗證 →](demo/README.zh-TW.md)
+[觀看合成資料示範錄影](images/demo-walkthrough.webm?raw=true) · [執行示範與驗證](demo/README.zh-TW.md)
+
+錄影透過唯讀檢視器，查看實際產生的工作簿及受阻執行證據，標籤包含英文及繁體中文。它展示的是輸出檔案，不是正式環境 Agent 的即時執行。
 
 ## 閱讀完整案例
 
@@ -97,4 +99,4 @@ python -m demo --workflow all --scenario blocked --output-dir output/blocked
 
 本 repo 包含重新編寫的案例、經整理的來源摘要、合成輸入及本機示範程式，不包含正式環境認證資料、工作階段狀態、公司原始紀錄或即時整合介面。歷史截圖用於說明排程設定，不能證明目前排程正常運作。[媒體說明](images/README.zh-TW.md) · [安全與資料邊界](SECURITY.zh-TW.md)
 
-公開程式及文件沿用 [MIT 授權](LICENSE)。本專案與我的 [Wellness Village 活動平台](https://github.com/jackyngtf/wellness-village-event-platform) 互相補充：前者呈現營運報表及恢復處理，後者呈現面向公眾的產品交付。
+公開程式及文件沿用 [MIT 授權](LICENSE)。

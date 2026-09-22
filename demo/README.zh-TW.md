@@ -58,6 +58,8 @@ python -m demo --workflow all --scenario blocked --output-dir output/blocked
 
 ## 可重複執行的檢查
 
+[32 秒錄影](../images/demo-walkthrough.webm?raw=true) 以唯讀方式查看實際產生的檔案。完成兩個情境後，可執行 `python scripts/render_demo_walkthrough.py`，再開啟 `output/demo-walkthrough.html`，在本機查看同一檢視器。顯示數值來自產生的檔案，並非即時 Agent 操作介面。
+
 ```bash
 python -m unittest discover -s tests -v
 python scripts/check_docs.py

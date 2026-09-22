@@ -58,6 +58,8 @@ The destination-change check is not a distributed lock. A real adapter would nee
 
 ## Checks you can repeat
 
+The [32-second recording](../images/demo-walkthrough.webm?raw=true) shows a read-only view of the generated artifacts. To inspect the same viewer locally after running both scenarios, run `python scripts/render_demo_walkthrough.py` and open `output/demo-walkthrough.html`. Displayed values come from the generated files; this is not a live agent interface.
+
 ```bash
 python -m unittest discover -s tests -v
 python scripts/check_docs.py
