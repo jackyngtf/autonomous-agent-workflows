@@ -1,123 +1,48 @@
-# Synology NAS Access Log Automation — Work Instruction (Reference Excerpt)
+# NAS access-log workflow: procedure reference
 
-> 🔒 **Sanitized reference.** Based on a production work-instruction. All IPs, hostnames, share paths, and credentials are **realistic dummy values** — swap them for your own environment using the config table below.
+[**English**](WORKINSTRUCTION.md) · [繁體中文](WORKINSTRUCTION.zh-TW.md)
 
-## What to change for your setup
+> Rewritten design reference, not an executable deployment guide. No credentials or live authentication snippets are included. Project-specific NAS behaviour needs verification in any new environment.
 
-| Variable | Dummy value in this doc | What it is |
+## Purpose and source boundary
+
+The historical workflow collected Synology file-transfer activity and added missing date coverage to monthly workbooks. Its original schedule was weekdays at 09:00. The procedure used SyslogClient with `logtype=cifs`, hourly windows and a 50,000-result limit.
+
+These are recorded integration choices, not a supported API contract for every DSM version. Authentication requirements, pagination, filtering and retention must be verified for the target system. A response at its limit may be truncated; a successful HTTP request alone does not establish completeness.
+
+The public [JSON fixture](../../sample-data/nas-syslog/nas_access_records_2026-08-04.json) is synthetic. The [local parser](../../demo/workflows.py) checks its declared fields and timestamps without calling a NAS.
+
+## Dates and reporting policy
+
+Use `Australia/Melbourne` to convert timestamps and determine the current day. Exclude current-day and future records. The historical design used Victorian working days and grouped consecutive non-working days within a month.
+
+The offline demo deliberately uses one worksheet per completed local date, including weekends, and separates months. It does not implement the historical holiday-grouping policy. A live adapter must define its chosen policy explicitly, including zero-row dates and source-retention gaps.
+
+## Procedure and failure boundaries
+
+| Step | Action | Required decision or check |
 |---|---|---|
-| `192.168.1.100` | NAS IP | Your Synology NAS IP |
-| `DEMO-NAS` | SMB server name | Your NAS hostname |
-| `5000` | web port | Your DSM web port |
-| `shared` | SMB share name | The share where workbooks live |
-| `svc_naslog` | service account | A dedicated account that's a member of `administrators` (needed for Log Center API) |
-| `/shared/reports/access-logs/...` | workbook path | Where monthly workbooks are stored |
-| `DSM 7.2` | DSM version | Your Synology DSM version |
+| 1. Inspect | Establish actual destination coverage and source availability | A stale report is not authoritative; unreadable is not absent |
+| 2. Fetch | Retrieve the required time windows through the configured adapter | Detect truncation, invalid filtering, timestamp gaps and failed requests |
+| 3. Plan | Group accepted records by the declared date policy | Separate confirmed zero records from unknown completeness |
+| 4. Prepare | Snapshot existing records and build the candidate | Reject conflicting updates rather than silently replacing prior records |
+| 5. Validate | Compare expected sheets, counts and cell values | Expected records must be prepared independently of the rebuild output |
+| 6. Publish | Write through the live destination adapter | Define concurrency, backup and partial-write recovery |
+| 7. Retrieve | Download and check the published copy | Post-upload failure is an incident, not proof that the destination was untouched |
+| 8. Report | Record coverage, changes, verification and unresolved gaps | Attribute scheduled, manual and unknown execution modes correctly |
 
-## 0. Critical Rules — Read First
+Rebuilding replaces a file while aiming to preserve its supported tabular records. It does not preserve arbitrary Excel features. This workflow does not require source-log deletion.
 
-1. **No credentials or session tokens in any output.** NAS passwords live in the vault.
-2. **Export only up to yesterday** (Melbourne/AEST, UTC+10). Today's log may be incomplete.
-3. **ONLY create NEW worksheets for missing dates.** Never overwrite/delete/rename existing sheets or NAS files.
-4. **Never use ZIP-level merge or `openpyxl` to WRITE XLSX.** Always rebuild from scratch with `xlsxwriter`. (`openpyxl` read-only is fine for validation.)
-5. **Use Python `requests` for ALL `entry.cgi` API calls** (curl fails with error 105 / "noprivilege"). Do NOT pass `enable_syno_token` when authenticating.
-6. **Validate twice** — locally after rebuild, AND by re-downloading from the NAS after upload. Keep rebuild and validation in SEPARATE bash calls (each ~20–32 s at production scale; combined exceeds a 45 s timeout).
-7. **Stop and report** on any ambiguity needing human approval.
+## Deployment responsibilities
 
-## 1. Overview
+An owner must supply credential delivery, least-required permissions verified for the actual API, time-window and pagination handling, retention policy and a recovery method. Authentication workarounds observed in this project should not be generalised without testing. The public reference intentionally omits HTTP login code and privilege assumptions.
 
-The agent authenticates to a Synology NAS (DSM 7.2), fetches file-transfer logs via the SyslogClient REST API (`logtype=cifs`, 1-hour windows, `limit=50000`), groups records by business day, rebuilds a monthly Excel workbook with `xlsxwriter`, uploads via SMB, and validates.
+Document maintenance is separate from exporting. Track monthly maintenance completion only after successful completion, and retain original incident history if a complete audit trail is required. See [knowledge maintenance](../../docs/self-improvement-loop.md).
 
-```
-Synology NAS ──REST API──▶ agent ──▶ rebuild monthly XLSX ──SMB upload──▶ validate
+## Try the local reconstruction
+
+```sh
+python -m demo --workflow nas --output-dir output/demo
 ```
 
-### Input format
-
-Synology SyslogClient returns `cifs` event records (file-transfer log entries). Each record looks like:
-
-```json
-{
-  "UTC": "2026-08-03T23:05:12+00:00",
-  "Account": "jsmith",
-  "Event": "cifs:connect",
-  "Share": "shared",
-  "Path": "/shared/Projects/Q3-Report.pptx",
-  "File size": "2456320",
-  "Action": "write",
-  "From": "10.20.30.41 (WS-JSMITH)"
-}
-```
-
-See [`sample-data/nas-syslog/nas_access_records_2026-08-04.json`](../../sample-data/nas-syslog/nas_access_records_2026-08-04.json) for a full example.
-
-## 2. NAS Connection Details
-
-| Parameter | Value |
-|---|---|
-| IP | `192.168.1.100` |
-| Web Portal | `http://192.168.1.100:5000` |
-| Username | `svc_naslog` *(must be in `administrators` group — Log Center API requires it)* |
-| Password | *(from vault — never written here)* |
-| SMB Server Name | `DEMO-NAS` |
-| SMB Share | `shared` |
-| DSM Version | `7.2` |
-
-> **Service account note:** the Log Center API (`SYNO.Core.SyslogClient.Log`) only lets administrators read logs, so a `users`-only account fails the log-fetch step. Use a dedicated service account in the `administrators` group with Read/Write on the share.
-
-**Workbook path on NAS:**
-```
-/shared/reports/access-logs/{Year}/{MON}.xlsx
-```
-
-## 3. Auth (REST API)
-
-Three-stage Synology auth flow, all via `requests`:
-
-```python
-import requests
-BASE = "http://192.168.1.100:5000/webapi"
-
-# 1. Login — do NOT pass enable_syno_token (it breaks entry.cgi auth)
-r = requests.get(f"{BASE}/auth.cgi", params={
-    "api": "SYNO.API.Auth", "version": "6", "method": "login",
-    "account": "svc_naslog", "passwd": <password from vault>,
-    "format": "sid",
-}).json()
-sid = r["data"]["sid"]
-
-# 2. Use SyslogClient to fetch file-transfer logs
-#    logtype=cifs is the ONLY value that returns file transfer records
-#    Use 1-hour time windows (multi-day ranges return unfiltered results)
-#    Use limit=50000 (pagination 'start' offset is broken — ignored by the API)
-# 3. Logout
-```
-
-> **Lesson (LRN):** curl fails on `entry.cgi` with error 105 / "noprivilege". Always use Python `requests`. And `logtype=cifs` is the only value that returns file-transfer records — `"filetransfer"`, `"smb"`, `"ftp"` all return 0 results.
-
-## 4. Business-day logic
-
-```python
-import holidays
-vic_holidays = holidays.country_holidays("AU", subdiv="VIC", years=<year ± 1>)
-
-def is_business_day(d):
-    return d.weekday() < 5 and d not in vic_holidays
-```
-
-Group consecutive non-working days **within the same month** as one `DD-DD` sheet. Never cross a month boundary. Never create an empty worksheet for a zero-row date — stop and report it.
-
-## 5. Procedure
-
-- **Step 0** — Pre-flight: self-heal `requests`/`pysmb`/`xlsxwriter`/`holidays` (VM filesystem resets between runs) + archive size guard.
-- **Step 1** — Auth + discover latest covered date in the existing workbook.
-- **Step 2** — Fetch file-transfer logs for each missing business day via SyslogClient (1-hour windows, `limit=50000`, `logtype=cifs`).
-- **Step 3** — Build export plan (date/range → worksheet → rows).
-- **Step 4** — Rebuild the ENTIRE workbook from scratch with `xlsxwriter` (all existing sheets preserved exactly + new sheets added).
-- **Step 5** — Upload via SMB (`pysmb`, keyword args).
-- **Step 6** — Validate: re-download from NAS, confirm sheet names + row counts.
-- **Step 7** — Generate report (`reports/nas_access_log_report_YYYY-MM-DD.md`).
-
-## 6. Month-end consolidation (Step 11, conditional)
-
-On the last working day of the month, AFTER the NAS export and main report are complete, run a consolidation pass on `.learnings/` (merge duplicates, prune superseded, promote durable rules to this file, rotate >90-day entries to `.learnings/archive/`). A consolidation failure must not affect the already-completed export. Idempotent per month with carry-forward catch-up. See [`docs/self-improvement-loop.md`](../../docs/self-improvement-loop.md).
+The demo checks synthetic local records, plans dates and verifies local workbooks. It cannot prove live API completeness, NAS delivery or scheduler reliability. See [the guide](../../demo/README.md) and [synthetic report format](sample-report.md).

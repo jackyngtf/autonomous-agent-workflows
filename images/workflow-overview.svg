@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="930" viewBox="0 0 1200 930" role="img" aria-labelledby="title desc">
+<title id="title">Every update has a boundary.</title><desc id="desc">Reporting design and the 23 September 2026 eTMS live report: 19 swapped, 8 held. Read-only checks found 19 archives and 19 served copies matching current NAS targets. Archive revision labels require correction.</desc>
+<style>text{font-family:Inter,Segoe UI,Microsoft JhengHei,Noto Sans CJK TC,sans-serif} .mono{font-family:Consolas,monospace}</style>
+<rect width="1200" height="930" fill="#f5f6f0"/>
+<text x="48" y="48" font-size="14" fill="#16735a" font-weight="700" class="">AUTONOMOUS AGENT WORKFLOWS</text>
+<text x="48" y="104" font-size="38" fill="#183632" font-weight="650" class="">Every update has a boundary.</text>
+<text x="48" y="144" font-size="20" fill="#586760" font-weight="400" class="">A schedule starts the session. The agent interprets. Python processes and compares.</text>
+<rect x="48" y="204" width="258" height="194" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
+<text x="68" y="242" font-size="14" fill="#16735a" font-weight="700" class="">01 / INPUTS</text>
+<text x="68" y="287" font-size="19" fill="#183632" font-weight="600" class="">Avaya · daily CSV</text>
+<text x="68" y="322" font-size="18" fill="#183632" font-weight="400" class="">NAS · API records</text>
+<text x="68" y="366" font-size="16" fill="#586760" font-weight="400" class="">Completed dates only</text>
+<path d="M306 301 L324 301" fill="none" stroke="#16735a" stroke-width="2"/>
+<path d="M319 296 L325 301 L319 306" fill="none" stroke="#16735a" stroke-width="2"/>
+<rect x="330" y="204" width="258" height="194" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
+<text x="350" y="242" font-size="14" fill="#16735a" font-weight="700" class="">02 / PLAN</text>
+<text x="350" y="287" font-size="19" fill="#183632" font-weight="600" class="">Inspect the workbook</text>
+<text x="350" y="322" font-size="18" fill="#183632" font-weight="400" class="">Find gaps and conflicts</text>
+<text x="350" y="366" font-size="16" fill="#586760" font-weight="400" class="">Keep uncertainty visible</text>
+<path d="M588 301 L606 301" fill="none" stroke="#16735a" stroke-width="2"/>
+<path d="M601 296 L607 301 L601 306" fill="none" stroke="#16735a" stroke-width="2"/>
+<rect x="612" y="204" width="258" height="194" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
+<text x="632" y="242" font-size="14" fill="#16735a" font-weight="700" class="">03 / REBUILD</text>
+<text x="632" y="287" font-size="19" fill="#183632" font-weight="600" class="">Python + XlsxWriter</text>
+<text x="632" y="322" font-size="18" fill="#183632" font-weight="400" class="">Retain supported records</text>
+<text x="632" y="366" font-size="16" fill="#586760" font-weight="400" class="">Write a candidate</text>
+<path d="M870 301 L888 301" fill="none" stroke="#16735a" stroke-width="2"/>
+<path d="M883 296 L889 301 L883 306" fill="none" stroke="#16735a" stroke-width="2"/>
+<rect x="894" y="204" width="258" height="194" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
+<text x="914" y="242" font-size="14" fill="#16735a" font-weight="700" class="">04 / VERIFY</text>
+<text x="914" y="287" font-size="19" fill="#183632" font-weight="600" class="">Read and compare</text>
+<text x="914" y="322" font-size="18" fill="#183632" font-weight="400" class="">Check the received copy</text>
+<text x="914" y="366" font-size="16" fill="#586760" font-weight="400" class="">Stop mismatched updates</text>
+<rect x="48" y="442" width="540" height="120" rx="8" fill="#e6eee5" stroke="#cfd8cf"/>
+<rect x="612" y="442" width="540" height="120" rx="8" fill="#f4eade" stroke="#cfd8cf"/>
+<text x="72" y="479" font-size="22" fill="#16735a" font-weight="650" class="">PASS → publish and record the outcome</text>
+<text x="72" y="519" font-size="18" fill="#183632" font-weight="400" class="">Avaya cleanup depends on a verified result.</text>
+<text x="636" y="479" font-size="22" fill="#865023" font-weight="650" class="">FAIL → retain inputs, stop and report</text>
+<text x="636" y="519" font-size="18" fill="#183632" font-weight="400" class="">A gap or unknown source stays visible.</text>
+<text x="48" y="618" font-size="22" fill="#183632" font-weight="600" class="">Incident → searchable history → revised operating instructions</text>
+<text x="48" y="658" font-size="17" fill="#586760" font-weight="400" class="">Operating design. Historical checks varied; the offline demo has a separate tested scope.</text>
+<rect x="48" y="700" width="1104" height="185" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
+<text x="72" y="738" font-size="20" fill="#16735a" font-weight="650" class="">THIRD JOB / eTMS document-update handoff</text>
+<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">External driver · live: 19 SWAPPED / 8 HELD</text>
+<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">23 Sep 2026 · 19 archives present; 19 HTTP copies match NAS target hashes.</text>
+<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">8 identities need review. Archive revision labels are wrong; rollback unverified.</text>
+</svg>

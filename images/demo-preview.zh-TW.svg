@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+<title id="title">一個完成的更新，一個被阻止的更新</title><desc id="desc">Designed preview derived from generated synthetic workbooks and blocked-run evidence; not a production screenshot.</desc>
+<style>text{font-family:Inter,Segoe UI,Microsoft JhengHei,Noto Sans CJK TC,sans-serif} .mono{font-family:Consolas,monospace}</style>
+<rect width="1200" height="650" fill="#f5f6f0"/>
+<text x="48" y="48" font-size="14" fill="#16735a" font-weight="700" class="">OFFLINE DEMO / SYNTHETIC DATA</text>
+<text x="48" y="101" font-size="36" fill="#183632" font-weight="650" class="">一個完成的更新，一個被阻止的更新</text>
+<text x="48" y="142" font-size="20" fill="#586760" font-weight="400" class="">依據實際 demo 輸出繪製；不含正式環境資料。</text>
+<rect x="48" y="186" width="540" height="244" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
+<text x="72" y="223" font-size="21" fill="#183632" font-weight="650" class="">AVAYA / 2026-08.xlsx</text>
+<text x="72" y="264" font-size="16" fill="#586760" font-weight="400" class="">工作表</text>
+<text x="348" y="264" font-size="16" fill="#586760" font-weight="400" class="">資料筆數</text>
+<text x="480" y="264" font-size="16" fill="#586760" font-weight="400" class="">欄數</text>
+<path d="M72 278 L564 278" fill="none" stroke="#cfd8cf" stroke-width="2"/>
+<text x="72" y="303" font-size="19" fill="#183632" font-weight="400" class="mono">2026-08-03</text>
+<text x="372" y="303" font-size="21" fill="#183632" font-weight="600" class="">1</text>
+<text x="496" y="303" font-size="21" fill="#183632" font-weight="600" class="">30</text>
+<path d="M72 318 L564 318" fill="none" stroke="#cfd8cf" stroke-width="2"/>
+<text x="72" y="343" font-size="19" fill="#183632" font-weight="400" class="mono">2026-08-04</text>
+<text x="372" y="343" font-size="21" fill="#183632" font-weight="600" class="">13</text>
+<text x="496" y="343" font-size="21" fill="#183632" font-weight="600" class="">30</text>
+<text x="72" y="397" font-size="18" fill="#16735a" font-weight="600" class="">合共 14 筆 · 保留前一日紀錄</text>
+<rect x="612" y="186" width="540" height="244" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
+<text x="636" y="223" font-size="21" fill="#183632" font-weight="650" class="">NAS / 2026-08.xlsx</text>
+<text x="636" y="264" font-size="16" fill="#586760" font-weight="400" class="">工作表</text>
+<text x="912" y="264" font-size="16" fill="#586760" font-weight="400" class="">資料筆數</text>
+<text x="1044" y="264" font-size="16" fill="#586760" font-weight="400" class="">欄數</text>
+<path d="M636 278 L1128 278" fill="none" stroke="#cfd8cf" stroke-width="2"/>
+<text x="636" y="303" font-size="19" fill="#183632" font-weight="400" class="mono">2026-08-03</text>
+<text x="936" y="303" font-size="21" fill="#183632" font-weight="600" class="">1</text>
+<text x="1060" y="303" font-size="21" fill="#183632" font-weight="600" class="">9</text>
+<path d="M636 318 L1128 318" fill="none" stroke="#cfd8cf" stroke-width="2"/>
+<text x="636" y="343" font-size="19" fill="#183632" font-weight="400" class="mono">2026-08-04</text>
+<text x="936" y="343" font-size="21" fill="#183632" font-weight="600" class="">8</text>
+<text x="1060" y="343" font-size="21" fill="#183632" font-weight="600" class="">9</text>
+<text x="636" y="397" font-size="18" fill="#16735a" font-weight="600" class="">合共 9 筆 · 保留前一日紀錄</text>
+<rect x="48" y="462" width="1104" height="118" rx="8" fill="#f4eade" stroke="#cfd8cf"/>
+<text x="72" y="501" font-size="22" fill="#865023" font-weight="650" class="">BLOCKED / 內容差異被攔截</text>
+<text x="72" y="540" font-size="19" fill="#183632" font-weight="400" class="">原工作簿保留 · 輸入未變 · 未執行清理 · exit 2</text>
+<text x="48" y="620" font-size="17" fill="#586760" font-weight="400" class="">本機傳輸模擬；不是 NAS 上傳或正式環境截圖。</text>
+</svg>

@@ -1,82 +1,82 @@
 [
   {
-    "UTC": "2026-08-03T23:05:12+00:00",
-    "Account": "jsmith",
-    "Event": "cifs:connect",
-    "Share": "shared",
-    "Path": "/shared/Projects/Q3-Report.pptx",
-    "File size": "2456320",
-    "Action": "write",
-    "From": "10.20.30.41 (WS-JSMITH)"
-  },
-  {
-    "UTC": "2026-08-03T23:18:44+00:00",
+    "UTC": "2026-08-04T00:05:00+00:00",
     "Account": "anonymous",
-    "Event": "cifs:connect",
-    "Share": "shared",
-    "Path": "/shared/Public/Onboarding-Checklist.pdf",
-    "File size": "184320",
+    "Event": "file-transfer",
+    "Share": "demo",
+    "Path": "/demo/folder-0/document-1.txt",
+    "File size": "128",
     "Action": "read",
-    "From": "10.20.30.52 (WS-LEEL)"
+    "From": "192.0.2.10 (DEMO-01)"
   },
   {
-    "UTC": "2026-08-03T23:42:09+00:00",
-    "Account": "svc_backup",
-    "Event": "cifs:connect",
-    "Share": "backups",
-    "Path": "/backups/db/daily-snap-20260804.tar.gz",
-    "File size": "4294967296",
+    "UTC": "2026-08-04T01:05:00+00:00",
+    "Account": "operator-alpha",
+    "Event": "file-transfer",
+    "Share": "demo",
+    "Path": "/demo/folder-1/document-2.txt",
+    "File size": "256",
     "Action": "write",
-    "From": "10.20.40.10 (SRV-BACKUP01)"
+    "From": "192.0.2.11 (DEMO-02)"
   },
   {
-    "UTC": "2026-08-04T00:15:33+00:00",
-    "Account": "mwong",
-    "Event": "cifs:connect",
-    "Share": "home",
-    "Path": "/home/mwong/Documents/Budget-2026.xlsx",
-    "File size": "98244",
-    "Action": "write",
-    "From": "10.20.30.65 (WS-MWONG)"
+    "UTC": "2026-08-04T02:05:00+00:00",
+    "Account": "service-demo",
+    "Event": "file-transfer",
+    "Share": "demo",
+    "Path": "/demo/folder-0/document-3.txt",
+    "File size": "384",
+    "Action": "read",
+    "From": "192.0.2.12 (DEMO-03)"
   },
   {
-    "UTC": "2026-08-04T00:51:07+00:00",
+    "UTC": "2026-08-04T03:05:00+00:00",
     "Account": "anonymous",
-    "Event": "cifs:connect",
-    "Share": "shared",
-    "Path": "/shared/Marketing/Launch-Photos.zip",
-    "File size": "524288000",
-    "Action": "read",
-    "From": "10.20.30.71 (WS-CHANW)"
-  },
-  {
-    "UTC": "2026-08-04T01:30:22+00:00",
-    "Account": "rpatel",
-    "Event": "cifs:connect",
-    "Share": "shared",
-    "Path": "/shared/HR/Policies-2026.pdf",
-    "File size": "312440",
-    "Action": "read",
-    "From": "10.20.30.48 (WS-RPATEL)"
-  },
-  {
-    "UTC": "2026-08-04T02:12:55+00:00",
-    "Account": "svc_backup",
-    "Event": "cifs:connect",
-    "Share": "backups",
-    "Path": "/backups/vm/finance-vm-20260804.vhdx",
-    "File size": "34359738368",
+    "Event": "file-transfer",
+    "Share": "demo",
+    "Path": "/demo/folder-1/document-4.txt",
+    "File size": "512",
     "Action": "write",
-    "From": "10.20.40.10 (SRV-BACKUP01)"
+    "From": "192.0.2.13 (DEMO-04)"
   },
   {
-    "UTC": "2026-08-04T03:05:18+00:00",
-    "Account": "jsmith",
-    "Event": "cifs:connect",
-    "Share": "shared",
-    "Path": "/shared/Projects/Client-Brief.docx",
-    "File size": "64288",
+    "UTC": "2026-08-04T04:05:00+00:00",
+    "Account": "service-demo",
+    "Event": "file-transfer",
+    "Share": "demo",
+    "Path": "/demo/folder-0/document-5.txt",
+    "File size": "640",
+    "Action": "read",
+    "From": "192.0.2.14 (DEMO-05)"
+  },
+  {
+    "UTC": "2026-08-04T05:05:00+00:00",
+    "Account": "operator-alpha",
+    "Event": "file-transfer",
+    "Share": "demo",
+    "Path": "/demo/folder-1/document-6.txt",
+    "File size": "768",
     "Action": "write",
-    "From": "10.20.30.41 (WS-JSMITH)"
+    "From": "192.0.2.15 (DEMO-06)"
+  },
+  {
+    "UTC": "2026-08-04T06:05:00+00:00",
+    "Account": "anonymous",
+    "Event": "file-transfer",
+    "Share": "demo",
+    "Path": "/demo/folder-0/document-7.txt",
+    "File size": "896",
+    "Action": "read",
+    "From": "192.0.2.16 (DEMO-07)"
+  },
+  {
+    "UTC": "2026-08-04T07:05:00+00:00",
+    "Account": "operator-alpha",
+    "Event": "file-transfer",
+    "Share": "demo",
+    "Path": "/demo/folder-1/document-8.txt",
+    "File size": "1024",
+    "Action": "write",
+    "From": "192.0.2.17 (DEMO-08)"
   }
 ]
