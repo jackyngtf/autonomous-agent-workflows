@@ -107,7 +107,7 @@ Read-only follow-up confirmed 27 inbox PDFs, the unchanged configuration hash wi
 
 Static review of the deployed source found that the driver parses swapped-file output using a path pattern that stops at whitespace (driver line 159; engine lines 465–466). All 19 planned destination paths contain whitespace, so none match that parser. If a live engine run marked those local files `SWAPPED`, the driver could skip the upload and HTTP-verification loops because its parsed completion list is empty, while still reaching inbox cleanup for successful local items (driver lines 196–197).
 
-This is a source-level finding, not an observed live failure: the reviewed run remained shadow and did not enter that branch. **The 19 planned items are not established as safe for live publication.** A separate private guard candidate now accepts spaced paths, checks complete publication records before remote writes, and requires every intended target to be uploaded and hash-verified before inbox cleanup. Nine offline test methods passed: six shadow regressions and three publication tests covering 11 synthetic scenarios. The live-publication tests simulate engine output and SMB/HTTP; they do not execute a real live engine. At this 22 September snapshot, the candidate was not deployed; the later deployment is recorded below. General production rollback/concurrency safety is not established.
+This is a source-level finding, not an observed live failure: the reviewed run remained shadow and did not enter that branch. **At that point, the 19 planned items were not established as safe for live publication.** A separate private guard candidate now accepts spaced paths, checks complete publication records before remote writes, and requires every intended target to be uploaded and hash-verified before inbox cleanup. Nine offline test methods passed: six shadow regressions and three publication tests covering 11 synthetic scenarios. The live-publication tests simulate engine output and SMB/HTTP; they do not execute a real live engine. At this 22 September snapshot, the candidate was not deployed; the later deployment is recorded below. General production rollback/concurrency safety is not established.
 
 ## Guard deployment and live configuration: 23 September 2026
 
@@ -118,10 +118,32 @@ At **08:41:54 +10:00 on 23 September 2026**, the tested guard driver was deploye
 | Deployed guard driver | `f2d7849743d5d8829f132a0d43a78dbc4280cc0da0e96eca780a97f94eea3b69` |
 | Unchanged engine | `bfa41f5ed860df0100fe382d13d4cf890b1781c24319308ab30da66e10037405` |
 
-A second independent read confirmed driver, engine and configuration hashes, both backups and no leftover staging files. **No operational engine was executed during deployment; the first live Cowork run remains pending.** The 22 September source snapshots and shadow outcomes remain historical evidence, not live replacement results.
+A second independent read confirmed driver, engine and configuration hashes, both backups and no leftover staging files. **No operational engine was executed during deployment; at that point, the first live Cowork run was pending.** The 22 September source snapshots and shadow outcomes remain historical evidence, not live replacement results.
+
+## Observed live run: 23 September 2026
+
+The retrieved **09:41** live report records **27 inputs, 19 SWAPPED and 8 HELD**. No timezone is inferred from the displayed report time. The trigger was not independently verified, so this record does not classify the attempt as a scheduled success. A preceding preflight summary recorded 27 HELD; the final result and read-only checks recorded at **11:55 +10:00 on 23 September** are separate evidence:
+
+| Check | Observed result |
+|---|---|
+| Destination and archive files | All 19 destinations and 19 archives existed; each destination's bytes differed from its archive |
+| Served copies | All 19 HTTP requests returned 200, with response SHA-256 matching the current NAS destination; zero check errors |
+| Inbox | Exactly the eight held filenames remained; none of the 19 swapped inputs remained |
+| Operational logs | Two logs each contained 19 new rows for this date |
+| Deployed state | Mode remained live; driver and engine hashes matched the 23 September deployment |
+
+All eight held items still require document-identity review. No rename suggestion is treated as approved. These checks support the reported live publication outcome, but **no prior destination hashes were captured**, so archive existence and differing bytes do not prove that each archive equals its exact pre-run destination.
+
+An **archive-label defect** also remains: static review found that the engine derives the revision label from the incoming document and uses it when naming the archived old file (engine lines 182, 320 and 325). All 19 archive labels used the incoming revision. The label therefore does not establish the archived content's actual revision. No fix for this naming defect had been prepared or applied at this snapshot; the result is not presented as anomaly-free or proof of rollback safety.
+
+| Retrieved artifact | Bytes | SHA-256 |
+|---|---:|---|
+| Preflight summary | 16,756 | `7803ce19b6e7a3a1391175e81a1c288256439c1fcfd672ee77ee7a0c7276acf3` |
+| Live run report | 12,501 | `95f2ff3619f93bd4e7bd886d810a669cfdf1c87043a6129284dbd2de836d2c4d` |
+| Live summary | 10,565 | `cc6d0d883eb0a341d9b775de630ae76851e46f6243568a7291c446d99291b238` |
 
 ## What this record does not establish
 
-No successful live swap, rollback, transactional guarantee, unattended success rate or notification delivery is established. The post-deployment evidence establishes reported shadow planning outcomes, not completed replacements. The public offline demo remains limited to Avaya and NAS reporting.
+The live report and read-only checks establish one observed publication outcome, with the archive-label limitation above. They do not establish rollback safety, transactional guarantees, scheduler reliability, an unattended success rate or notification delivery. The public offline demo remains limited to Avaya and NAS reporting, and the eTMS evidence remains outside the 92-file reporting ledger.
 
 [Read the case](../case-study/07-etms-document-handoff.md) · [Inspect the task reference](../../examples/etms-doc-swap/README.md) · [Claim index](claim-index.md).

@@ -4,7 +4,7 @@
 
 本目錄區分歷史報告、設計規則，以及讀者能在本機重現的行為。Avaya／NAS 盤點日期為 **2026 年 9 月 22 日**，沒有為更新清單而重跑這些歷史整合。獨立的 eTMS 檢視則經授權唯讀檢查部署及報告，並評估使用者手動觸發的 Cowork shadow 執行。
 
-[eTMS 案例](../case-study/07-etms-document-handoff.zh-TW.md)結合已檢視部署／原始碼快照、記錄 **30 HELD、0 SWAPPED** 的手動 shadow 報告，以及唯讀確認全部 22 份被報為目標缺漏的檔案均存在於遠端。候選修正的離線檢查與已檢視部署分開標示。它不佔報告清單的任何一列，也不證明成功的 live 替換或回復。
+[eTMS 案例](../case-study/07-etms-document-handoff.zh-TW.md)結合部署／原始碼檢視、暫緩的 shadow 報告、離線修正檢查，以及 **9 月 23 日記錄 19 SWAPPED、8 HELD 的 live 報告**。唯讀跟進確認 19 份目的地及封存、19 個網頁副本的摘要值與目前 NAS 目標一致，以及八項暫緩輸入仍在收件區。封存版本標籤有誤，備份是否完全保留執行前內容及回復安全性仍未確立。這部分證據不佔 92 份報告清單的任何一列。
 
 ## 閱讀入口
 
@@ -12,7 +12,7 @@
 - [執行案例摘要](selected-run-extracts/README.zh-TW.md)：重新撰寫並去識別化的特定觀察。
 - [報告檔案清單](run-ledger.csv)：92 份主要執行報告、來源摘要值，以及明確標示的未知欄位。
 - [執行紀錄章節](../case-study/05-operating-record.zh-TW.md)：本次盤點能支持的結果。
-- [eTMS 部署與執行檢視](etms-deployment-review-2026-09-22.zh-TW.md)：程式發現、暫緩結果彙總、中繼資料檢查、離線跟進及已核實的修正部署；其後手動 shadow 執行以較早 30 項的 27 項子集為輸入，記錄 19 PLANNED、8 HELD、0 SWAPPED。
+- [eTMS 部署與執行檢視](etms-deployment-review-2026-09-22.zh-TW.md)：程式發現、shadow 診斷、修正測試、已核實部署，以及 9 月 23 日 live 結果、唯讀檢查與封存標籤限制。
 
 ## 證據分類
 

@@ -7,7 +7,7 @@ description: 平日 09:30 將文件替換交由外部部署 engine 處理的公�
 
 [English](SKILL.md) · [**繁體中文**](SKILL.zh-TW.md)
 
-> 重新編寫的入口約定參考，不是可執行的部署設定。2026 年 9 月 22 日的唯讀部署／原始碼檢視已確認外置檔案及 shadow 設定，原始碼檢視沒有執行操作程式。另行評估的手動 shadow 報告記錄 30 HELD、0 SWAPPED，不能證明成功替換。實作缺口詳見[附日期的檢視](../../docs/evidence/etms-deployment-review-2026-09-22.zh-TW.md)。
+> 重新編寫的入口約定參考，不是可執行的部署設定。[附日期檢視](../../docs/evidence/etms-deployment-review-2026-09-22.zh-TW.md)區分原始碼檢視、shadow 執行、修正測試及 9 月 23 日的 live 結果，包括唯讀驗證、餘下封存標籤及恢復限制。
 
 預定排程於平日 09:30 執行，來源沒有訂明時區。任務目的是將收到的文件更新交由預先建立的 engine 處理，再報告結果。交接流程及證據邊界詳見[程序參考](WORKINSTRUCTION.zh-TW.md)。
 

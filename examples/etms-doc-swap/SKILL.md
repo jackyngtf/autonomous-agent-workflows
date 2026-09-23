@@ -7,7 +7,7 @@ description: Public reference for a weekday 09:30 document-replacement handoff t
 
 [**English**](SKILL.md) · [繁體中文](SKILL.zh-TW.md)
 
-> Rewritten entry-contract reference, not a runnable deployment configuration. A read-only deployment/source review on 22 September 2026 confirmed the external files and a shadow configuration. The source review did not execute the operational code. A separately assessed manual shadow report recorded 30 HELD and 0 SWAPPED; it does not establish successful replacement. See the [dated review](../../docs/evidence/etms-deployment-review-2026-09-22.md) for implementation gaps.
+> Rewritten entry-contract reference, not a runnable deployment configuration. The [dated review](../../docs/evidence/etms-deployment-review-2026-09-22.md) distinguishes source inspection, shadow runs, tested repairs and the 23 September live result, including read-only verification and remaining archive-label and recovery limits.
 
 The intended scheduled task runs on weekdays at 09:30; the source does not establish a timezone. Its purpose is to hand incoming document updates to the prebuilt engine and report the outcome. Read the [procedure reference](WORKINSTRUCTION.md) for the handoff and evidence boundaries.
 

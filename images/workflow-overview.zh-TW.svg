@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="930" viewBox="0 0 1200 930" role="img" aria-labelledby="title desc">
-<title id="title">每次更新，都經過明確的檢查</title><desc id="desc">Reporting design and the eTMS post-fix shadow report: 19 planned, 8 held, zero swapped. The guard was deployed on 23 September and configuration switched to live; live execution remains unverified.</desc>
+<title id="title">每次更新，都經過明確的檢查</title><desc id="desc">Reporting design and the 23 September 2026 eTMS live report: 19 swapped, 8 held. Read-only checks found 19 archives and 19 served copies matching current NAS targets. Archive revision labels require correction.</desc>
 <style>text{font-family:Inter,Segoe UI,Microsoft JhengHei,Noto Sans CJK TC,sans-serif} .mono{font-family:Consolas,monospace}</style>
 <rect width="1200" height="930" fill="#f5f6f0"/>
 <text x="48" y="48" font-size="14" fill="#16735a" font-weight="700" class="">AUTONOMOUS AGENT WORKFLOWS</text>
@@ -41,7 +41,7 @@
 <text x="48" y="658" font-size="17" fill="#586760" font-weight="400" class="">操作設計；歷史檢查深度不一。離線 demo 另有測試範圍。</text>
 <rect x="48" y="700" width="1104" height="185" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
 <text x="72" y="738" font-size="20" fill="#16735a" font-weight="650" class="">第三項工作 / eTMS 文件換版交接</text>
-<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">外置 driver · Shadow：19 PLANNED / 8 HELD / 0 SWAPPED</text>
-<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">2026-09-22 16:35 手動重跑 · 27 份輸入，未釐清配對保持 HELD。</text>
-<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">9 月 23 日防護版已部署、設定切換 live；首次 live 執行待確認。</text>
+<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">外置 driver · Live：19 SWAPPED / 8 HELD</text>
+<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">2026-09-23 · 19 份封存存在；19 個 HTTP 副本與 NAS 摘要值一致。</text>
+<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">8 份需核對文件身份；封存版本標籤有誤，回復安全性未驗證。</text>
 </svg>

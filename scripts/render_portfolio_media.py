@@ -39,7 +39,7 @@ def save(parts, filename):
 
 def architecture(zh):
     title = '每次更新，都經過明確的檢查' if zh else 'Every update has a boundary.'
-    p = start(title, 'Reporting design and the eTMS post-fix shadow report: 19 planned, 8 held, zero swapped. The guard was deployed on 23 September and configuration switched to live; live execution remains unverified.', 930)
+    p = start(title, 'Reporting design and the 23 September 2026 eTMS live report: 19 swapped, 8 held. Read-only checks found 19 archives and 19 served copies matching current NAS targets. Archive revision labels require correction.', 930)
     text(p, 48, 48, 'AUTONOMOUS AGENT WORKFLOWS', 14, GREEN, 700)
     text(p, 48, 104, title, 38, INK, 650)
     text(p, 48, 144, '排程啟動工作；Agent 解讀情況；Python 處理及比較資料。' if zh else 'A schedule starts the session. The agent interprets. Python processes and compares.', 20, MUTED)
@@ -68,9 +68,9 @@ def architecture(zh):
     text(p, 48, 658, '操作設計；歷史檢查深度不一。離線 demo 另有測試範圍。' if zh else 'Operating design. Historical checks varied; the offline demo has a separate tested scope.', 17, MUTED)
     box(p, 48, 700, 1104, 185)
     text(p, 72, 738, '第三項工作 / eTMS 文件換版交接' if zh else 'THIRD JOB / eTMS document-update handoff', 20, GREEN, 650)
-    text(p, 72, 779, '外置 driver · Shadow：19 PLANNED / 8 HELD / 0 SWAPPED' if zh else 'External driver · shadow: 19 PLANNED / 8 HELD / 0 SWAPPED', 22, INK, 600)
-    text(p, 72, 819, '2026-09-22 16:35 手動重跑 · 27 份輸入，未釐清配對保持 HELD。' if zh else '22 Sep 2026, 16:35 manual rerun · 27 inputs; unresolved identities stay held.', 18)
-    text(p, 72, 858, '9 月 23 日防護版已部署、設定切換 live；首次 live 執行待確認。' if zh else '23 Sep: guard deployed; mode live. First live execution unverified.', 17, MUTED)
+    text(p, 72, 779, '外置 driver · Live：19 SWAPPED / 8 HELD' if zh else 'External driver · live: 19 SWAPPED / 8 HELD', 22, INK, 600)
+    text(p, 72, 819, '2026-09-23 · 19 份封存存在；19 個 HTTP 副本與 NAS 摘要值一致。' if zh else '23 Sep 2026 · 19 archives present; 19 HTTP copies match NAS target hashes.', 18)
+    text(p, 72, 858, '8 份需核對文件身份；封存版本標籤有誤，回復安全性未驗證。' if zh else '8 identities need review. Archive revision labels are wrong; rollback unverified.', 17, MUTED)
     save(p, 'workflow-overview.zh-TW.svg' if zh else 'workflow-overview.svg')
 
 

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="930" viewBox="0 0 1200 930" role="img" aria-labelledby="title desc">
-<title id="title">Every update has a boundary.</title><desc id="desc">Reporting design and the eTMS post-fix shadow report: 19 planned, 8 held, zero swapped. The guard was deployed on 23 September and configuration switched to live; live execution remains unverified.</desc>
+<title id="title">Every update has a boundary.</title><desc id="desc">Reporting design and the 23 September 2026 eTMS live report: 19 swapped, 8 held. Read-only checks found 19 archives and 19 served copies matching current NAS targets. Archive revision labels require correction.</desc>
 <style>text{font-family:Inter,Segoe UI,Microsoft JhengHei,Noto Sans CJK TC,sans-serif} .mono{font-family:Consolas,monospace}</style>
 <rect width="1200" height="930" fill="#f5f6f0"/>
 <text x="48" y="48" font-size="14" fill="#16735a" font-weight="700" class="">AUTONOMOUS AGENT WORKFLOWS</text>
@@ -41,7 +41,7 @@
 <text x="48" y="658" font-size="17" fill="#586760" font-weight="400" class="">Operating design. Historical checks varied; the offline demo has a separate tested scope.</text>
 <rect x="48" y="700" width="1104" height="185" rx="8" fill="#ffffff" stroke="#cfd8cf"/>
 <text x="72" y="738" font-size="20" fill="#16735a" font-weight="650" class="">THIRD JOB / eTMS document-update handoff</text>
-<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">External driver · shadow: 19 PLANNED / 8 HELD / 0 SWAPPED</text>
-<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">22 Sep 2026, 16:35 manual rerun · 27 inputs; unresolved identities stay held.</text>
-<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">23 Sep: guard deployed; mode live. First live execution unverified.</text>
+<text x="72" y="779" font-size="22" fill="#183632" font-weight="600" class="">External driver · live: 19 SWAPPED / 8 HELD</text>
+<text x="72" y="819" font-size="18" fill="#183632" font-weight="400" class="">23 Sep 2026 · 19 archives present; 19 HTTP copies match NAS target hashes.</text>
+<text x="72" y="858" font-size="17" fill="#586760" font-weight="400" class="">8 identities need review. Archive revision labels are wrong; rollback unverified.</text>
 </svg>
